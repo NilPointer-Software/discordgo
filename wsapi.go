@@ -736,6 +736,8 @@ type identifyData struct {
 	LargeThreshold int                `json:"large_threshold"`
 	Compress       bool               `json:"compress"`
 	Shard          *[2]int            `json:"shard,omitempty"`
+	// Gateway intents, see https://discord.com/developers/docs/topics/gateway#gateway-intents
+	Intents int `json:"intents"`
 }
 
 type identifyOp struct {
@@ -753,11 +755,14 @@ func (s *Session) identify() error {
 		"",
 	}
 
+	tmpSelectedIntents := 0b001001001111111
+
 	data := identifyData{s.Token,
 		properties,
 		250,
 		s.Compress,
 		nil,
+		tmpSelectedIntents,
 	}
 
 	if s.ShardCount > 1 {
