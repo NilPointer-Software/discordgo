@@ -755,7 +755,7 @@ func (s *Session) identify() error {
 		"",
 	}
 
-	tmpSelectedIntents := 0b001001001111111
+	tmpSelectedIntents := 0b001001001111101
 
 	data := identifyData{s.Token,
 		properties,
