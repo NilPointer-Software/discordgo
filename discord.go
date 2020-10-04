@@ -61,6 +61,7 @@ func New(args ...interface{}) (s *Session, err error) {
 		UserAgent:              "DiscordBot (https://github.com/bwmarrin/discordgo, v" + VERSION + ")",
 		sequence:               new(int64),
 		LastHeartbeatAck:       time.Now().UTC(),
+		Intents:                0b001001001111101,
 	}
 
 	// If no arguments are passed return the empty Session interface.
