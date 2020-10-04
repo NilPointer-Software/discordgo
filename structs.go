@@ -117,6 +117,9 @@ type Session struct {
 
 	// used to make sure gateway websocket writes do not happen concurrently
 	wsMutex sync.Mutex
+
+	// used to send intents
+	Intents int
 }
 
 // UserConnection is a Connection returned from the UserConnections endpoint
