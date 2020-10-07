@@ -118,7 +118,7 @@ type Session struct {
 	// used to make sure gateway websocket writes do not happen concurrently
 	wsMutex sync.Mutex
 
-	// used to send intents
+	// used to send intents to the gateway
 	Intents int
 }
 
