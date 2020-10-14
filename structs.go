@@ -590,40 +590,51 @@ type VoiceState struct {
 
 // A Presence stores the online, offline, or idle and game status of Guild members.
 type Presence struct {
-	User   *User    `json:"user"`
-	Status Status   `json:"status"`
-	Game   *Game    `json:"game"`
-	Nick   string   `json:"nick"`
-	Roles  []string `json:"roles"`
-	Since  *int     `json:"since"`
+	User         *User        `json:"user"`
+	GuildID      string       `json:"guild_id"`
+	Status       Status       `json:"status"`
+	Activities   *Activity    `json:"activities"`
+	ClientStatus ClientStatus `json:"client_status"`
 }
 
-// GameType is the type of "game" (see GameType* consts) in the Game struct
-type GameType int
+// ActivityType is the type of "activity" (see ActivityType* consts) in the Activity struct
+type ActivityType int
 
-// Valid GameType values
+// Valid ActivityType values
 const (
-	GameTypeGame GameType = iota
-	GameTypeStreaming
-	GameTypeListening
-	GameTypeWatching
+	ActivityTypeGame ActivityType = iota
+	ActivityTypeStreaming
+	ActivityTypeListening
+	ActivityTypeCustom
+	ActivityTypeCompeting
 )
 
-// A Game struct holds the name of the "playing .." game for a user
-type Game struct {
-	Name          string     `json:"name"`
-	Type          GameType   `json:"type"`
-	URL           string     `json:"url,omitempty"`
-	Details       string     `json:"details,omitempty"`
-	State         string     `json:"state,omitempty"`
-	TimeStamps    TimeStamps `json:"timestamps,omitempty"`
-	Assets        Assets     `json:"assets,omitempty"`
-	ApplicationID string     `json:"application_id,omitempty"`
-	Instance      int8       `json:"instance,omitempty"`
-	// TODO: Party and Secrets (unknown structure)
+// A Activity struct holds the name of the "playing .." activity for a user
+type Activity struct { // TODO: Check if works
+	Name          string       `json:"name"`
+	Type          ActivityType `json:"type"`
+	URL           string       `json:"url,omitempty"`
+	CreatedAt     int          `json:"created_at"` // TODO: Parse?
+	TimeStamps    TimeStamps   `json:"timestamps,omitempty"`
+	ApplicationID string       `json:"application_id,omitempty"`
+	Details       string       `json:"details,omitempty"`
+	State         string       `json:"state,omitempty"`
+	Emiji         Emoji        `json:"emoji,omitempty"`
+	Party         Party        `json:"party,omitempty"`
+	Assets        Assets       `json:"assets,omitempty"`
+	Secrets       Secrets      `json:"secrets,omitempty"`
+	Instance      bool         `json:"instance,omitempty"`
+	Flags         int          `json:"flags,omitempty"` // TODO: Flags
 }
 
-// A TimeStamps struct contains start and end times used in the rich presence "playing .." Game
+// A ClientStatus struct holds information about the users platform
+type ClientStatus struct {
+	Desktop *Status `json:"desktop"`
+	Mobile  *Status `json:"mobile"`
+	Web     *Status `json:"web"`
+}
+
+// A TimeStamps struct contains start and end times used in the rich presence "playing .." Activity
 type TimeStamps struct {
 	EndTimestamp   int64 `json:"end,omitempty"`
 	StartTimestamp int64 `json:"start,omitempty"`
@@ -644,12 +655,25 @@ func (t *TimeStamps) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// An Assets struct contains assets and labels used in the rich presence "playing .." Game
+// An Assets struct contains assets and labels used in the rich presence "playing .." Activity
 type Assets struct {
 	LargeImageID string `json:"large_image,omitempty"`
 	SmallImageID string `json:"small_image,omitempty"`
 	LargeText    string `json:"large_text,omitempty"`
 	SmallText    string `json:"small_text,omitempty"`
+}
+
+// An Party struct contains the id and size of a party used in rich presence Activity
+type Party struct {
+	ID    string `json:"id,omitempty"`
+	Size []int   `json:"size,omitempty"`
+}
+
+// An Secrets struct contains secrets for rich presence Activity
+type Secrets struct {
+	Join     string `json:"join,omitempty"`
+	Spectate string `json:"spectate,omitempty"`
+	Match    string `json:"match,omitempty"`
 }
 
 // A Member stores user information for Guild members. A guild
@@ -762,8 +786,8 @@ type GuildBan struct {
 	User   *User  `json:"user"`
 }
 
-// A GuildEmbed stores data for a guild embed.
-type GuildEmbed struct {
+// A GuildWidget stores data for a guild widget.
+type GuildWidget struct {
 	Enabled   bool   `json:"enabled"`
 	ChannelID string `json:"channel_id"`
 }

@@ -1256,11 +1256,11 @@ func (s *Session) GuildSplash(guildID string) (img image.Image, err error) {
 	return
 }
 
-// GuildEmbed returns the embed for a Guild.
+// GuildWidget returns the widget for a Guild.
 // guildID   : The ID of a Guild.
-func (s *Session) GuildEmbed(guildID string) (st *GuildEmbed, err error) {
+func (s *Session) GuildWidget(guildID string) (st *GuildWidget, err error) {
 
-	body, err := s.RequestWithBucketID("GET", EndpointGuildEmbed(guildID), nil, EndpointGuildEmbed(guildID))
+	body, err := s.RequestWithBucketID("GET", EndpointGuildWidget(guildID), nil, EndpointGuildWidget(guildID))
 	if err != nil {
 		return
 	}
@@ -1269,13 +1269,20 @@ func (s *Session) GuildEmbed(guildID string) (st *GuildEmbed, err error) {
 	return
 }
 
-// GuildEmbedEdit returns the embed for a Guild.
+// GuildEmbedEdit returns the widget for a Guild.
 // guildID   : The ID of a Guild.
-func (s *Session) GuildEmbedEdit(guildID string, enabled bool, channelID string) (err error) {
+// enabled   : Whether the widget is enabled.
+// channelID : The widget Channel ID
+func (s *Session) GuildEmbedEdit(guildID string, enabled bool, channelID string) (st *GuildWidget, err error) {
 
-	data := GuildEmbed{enabled, channelID}
+	data := GuildWidget{enabled, channelID}
 
-	_, err = s.RequestWithBucketID("PATCH", EndpointGuildEmbed(guildID), data, EndpointGuildEmbed(guildID))
+	body, err := s.RequestWithBucketID("PATCH", EndpointGuildWidget(guildID), data, EndpointGuildWidget(guildID))
+	if err != nil {
+		return
+	}
+
+	err = unmarshal(body, &st)
 	return
 }
 
