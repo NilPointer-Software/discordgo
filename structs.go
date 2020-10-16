@@ -600,7 +600,7 @@ type Presence struct {
 	User         *User        `json:"user"`
 	GuildID      string       `json:"guild_id"`
 	Status       Status       `json:"status"`
-	Activities   *Activity    `json:"activities"`
+	Activities   []*Activity   `json:"activities"`
 	ClientStatus ClientStatus `json:"client_status"`
 }
 
