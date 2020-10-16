@@ -27,11 +27,13 @@ func init() {
 	if envBotToken != "" {
 		if d, err := New(envBotToken); err == nil {
 			dgBot = d
+			dgBot.Intents = 32767
 		}
 	}
 
 	if d, err := New(envToken); err == nil {
 		dg = d
+		dg.Intents = 32767
 	} else {
 		fmt.Println("dg is nil, error", err)
 	}

@@ -286,11 +286,18 @@ type ChannelEdit struct {
 
 // A PermissionOverwrite holds permission overwrite data for a Channel
 type PermissionOverwrite struct {
-	ID    string `json:"id"`
-	Type  string `json:"type"`
-	Deny  int    `json:"deny"`
-	Allow int    `json:"allow"`
+	ID    string                  `json:"id"`
+	Type  PermissionOverwriteType `json:"type"`
+	Deny  int                     `json:"deny,string"`
+	Allow int                     `json:"allow,string"`
 }
+
+type PermissionOverwriteType int
+
+const (
+	PermissionOverwriteTypeRole   PermissionOverwriteType = 0
+	PermissionOverwriteTypeMember PermissionOverwriteType = 1
+)
 
 // Emoji struct holds data related to Emoji's
 type Emoji struct {
@@ -509,7 +516,7 @@ type UserGuild struct {
 	Name        string `json:"name"`
 	Icon        string `json:"icon"`
 	Owner       bool   `json:"owner"`
-	Permissions int    `json:"permissions"`
+	Permissions int    `json:"permissions,string"`
 }
 
 // A GuildParams stores all the data needed to update discord guild settings
@@ -552,7 +559,7 @@ type Role struct {
 	// The permissions of the role on the guild (doesn't include channel overrides).
 	// This is a combination of bit masks; the presence of a certain permission can
 	// be checked by performing a bitwise AND between this int and the permission.
-	Permissions int `json:"permissions"`
+	Permissions int `json:"permissions,string"`
 }
 
 // Mention returns a string which mentions the role

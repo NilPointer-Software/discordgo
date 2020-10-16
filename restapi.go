@@ -550,7 +550,7 @@ func memberPermissions(guild *Guild, channel *Channel, member *Member) (apermiss
 	// Member overwrites can override role overrides, so do two passes
 	for _, overwrite := range channel.PermissionOverwrites {
 		for _, roleID := range member.Roles {
-			if overwrite.Type == "role" && roleID == overwrite.ID {
+			if overwrite.Type == PermissionOverwriteTypeRole && roleID == overwrite.ID {
 				denies |= overwrite.Deny
 				allows |= overwrite.Allow
 				break
@@ -562,7 +562,7 @@ func memberPermissions(guild *Guild, channel *Channel, member *Member) (apermiss
 	apermissions |= allows
 
 	for _, overwrite := range channel.PermissionOverwrites {
-		if overwrite.Type == "member" && overwrite.ID == userID {
+		if overwrite.Type == PermissionOverwriteTypeMember && overwrite.ID == userID {
 			apermissions &= ^overwrite.Deny
 			apermissions |= overwrite.Allow
 			break
