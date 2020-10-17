@@ -186,6 +186,11 @@ type MessageReactionRemoveAll struct {
 	*MessageReaction
 }
 
+// MessageReactionRemoveEmoji is the data for a MessageReactionRemoveEmoji event.
+type MessageReactionRemoveEmoji struct {
+	*MessageReaction
+}
+
 // PresencesReplace is the data for a PresencesReplace event.
 type PresencesReplace []*Presence
 
@@ -261,4 +266,26 @@ type MessageDeleteBulk struct {
 type WebhooksUpdate struct {
 	GuildID   string `json:"guild_id"`
 	ChannelID string `json:"channel_id"`
+}
+
+// InviteCreate is the data for InviteCreate event
+type InviteCreate struct {
+	ChannelID  string    `json:"channel_id"`
+	Code       string    `json:"code"`
+	CreatedAt  Timestamp `json:"created_at"`
+	GuildID    string    `json:"guild_id"`
+	Inviter    *User     `json:"inviter"`
+	MaxAge     int       `json:"max_age"`
+	MaxUses    int       `json:"max_uses"`
+	Target     *User     `json:"target_user"`
+	TargetType int       `json:"target_user_type"`
+	Temporary  bool      `json:"temporary"`
+	Uses       int       `json:"uses"`
+}
+
+// InviteDelete is the data for InviteDelete event
+type InviteDelete struct {
+	ChannelID string `json:"channel_id"`
+	GuildID   string `json:"guild_id"`
+	Code      string `json:"code"`
 }

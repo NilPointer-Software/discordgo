@@ -432,11 +432,6 @@ func (s *Session) UpdateStatusComplex(usd UpdateStatusData) (err error) {
 	s.wsMutex.Lock()
 	err = s.wsConn.WriteJSON(updateStatusOp{3, usd})
 	s.wsMutex.Unlock()
-	fmt.Printf("%+v\n", updateStatusOp{3, usd})
-	json, e := json.Marshal(updateStatusOp{3, usd})
-	if e == nil {
-		fmt.Println(string(json))
-	}
 
 	return
 }
