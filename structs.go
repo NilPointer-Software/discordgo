@@ -389,88 +389,23 @@ type Guild struct {
 	// to retrieve the icon itself.
 	Icon string `json:"icon"`
 
+	// The hash of the guild's splash.
+	Splash string `json:"splash"`
+
+	// The Hash of the guild's discovery splash. Only available for guilds with "DISCOVERABLE" feature
+	DiscoverySplash string `json:"discovery_splash"`
+
+	// The user ID of the owner of the guild.
+	OwnerID string `json:"owner_id"`
+
 	// The voice region of the guild.
 	Region string `json:"region"`
 
 	// The ID of the AFK voice channel.
 	AfkChannelID string `json:"afk_channel_id"`
 
-	// The ID of the embed channel ID, used for embed widgets.
-	EmbedChannelID string `json:"embed_channel_id"`
-
-	// The user ID of the owner of the guild.
-	OwnerID string `json:"owner_id"`
-
-	// The time at which the current user joined the guild.
-	// This field is only present in GUILD_CREATE events and websocket
-	// update events, and thus is only present in state-cached guilds.
-	JoinedAt Timestamp `json:"joined_at"`
-
-	// The hash of the guild's splash.
-	Splash string `json:"splash"`
-
 	// The timeout, in seconds, before a user is considered AFK in voice.
 	AfkTimeout int `json:"afk_timeout"`
-
-	// The number of members in the guild.
-	// This field is only present in GUILD_CREATE events and websocket
-	// update events, and thus is only present in state-cached guilds.
-	MemberCount int `json:"member_count"`
-
-	// The verification level required for the guild.
-	VerificationLevel VerificationLevel `json:"verification_level"`
-
-	// Whether the guild has embedding enabled.
-	EmbedEnabled bool `json:"embed_enabled"`
-
-	// Whether the guild is considered large. This is
-	// determined by a member threshold in the identify packet,
-	// and is currently hard-coded at 250 members in the library.
-	Large bool `json:"large"`
-
-	// The default message notification setting for the guild.
-	// 0 == all messages, 1 == mentions only.
-	DefaultMessageNotifications int `json:"default_message_notifications"`
-
-	// A list of roles in the guild.
-	Roles []*Role `json:"roles"`
-
-	// A list of the custom emojis present in the guild.
-	Emojis []*Emoji `json:"emojis"`
-
-	// A list of the members in the guild.
-	// This field is only present in GUILD_CREATE events and websocket
-	// update events, and thus is only present in state-cached guilds.
-	Members []*Member `json:"members"`
-
-	// A list of partial presence objects for members in the guild.
-	// This field is only present in GUILD_CREATE events and websocket
-	// update events, and thus is only present in state-cached guilds.
-	Presences []*Presence `json:"presences"`
-
-	// A list of channels in the guild.
-	// This field is only present in GUILD_CREATE events and websocket
-	// update events, and thus is only present in state-cached guilds.
-	Channels []*Channel `json:"channels"`
-
-	// A list of voice states for the guild.
-	// This field is only present in GUILD_CREATE events and websocket
-	// update events, and thus is only present in state-cached guilds.
-	VoiceStates []*VoiceState `json:"voice_states"`
-
-	// Whether this guild is currently unavailable (most likely due to outage).
-	// This field is only present in GUILD_CREATE events and websocket
-	// update events, and thus is only present in state-cached guilds.
-	Unavailable bool `json:"unavailable"`
-
-	// The explicit content filter level
-	ExplicitContentFilter ExplicitContentFilterLevel `json:"explicit_content_filter"`
-
-	// The list of enabled guild features
-	Features []string `json:"features"`
-
-	// Required MFA level for the guild
-	MfaLevel MfaLevel `json:"mfa_level"`
 
 	// Whether or not the Server Widget is enabled
 	WidgetEnabled bool `json:"widget_enabled"`
@@ -478,8 +413,85 @@ type Guild struct {
 	// The Channel ID for the Server Widget
 	WidgetChannelID string `json:"widget_channel_id"`
 
+	// The verification level required for the guild.
+	VerificationLevel VerificationLevel `json:"verification_level"`
+
+	// The default message notification setting for the guild.
+	// 0 == all messages, 1 == mentions only.
+	DefaultMessageNotifications int `json:"default_message_notifications"`
+
+	// The explicit content filter level
+	ExplicitContentFilter ExplicitContentFilterLevel `json:"explicit_content_filter"`
+
+	// A list of roles in the guild.
+	Roles []*Role `json:"roles"`
+
+	// A list of the custom emojis present in the guild.
+	Emojis []*Emoji `json:"emojis"`
+
+	// The list of enabled guild features
+	Features []string `json:"features"`
+
+	// Required MFA level for the guild
+	MfaLevel MfaLevel `json:"mfa_level"`
+
+	// Application ID of the Guild Creator if it is bot-created
+	ApplicationID string `json:"application_id"`
+
 	// The Channel ID to which system messages are sent (eg join and leave messages)
 	SystemChannelID string `json:"system_channel_id"`
+
+	// System Channel Flags
+	SystemChannelFlags int `json:"system_channel_flags"`
+
+	// Channel ID of the channel where guilds with "PUBLIC" feature can display rules and/or guidelines
+	RulesChannelID string `json:"rules_channel_id"`
+
+	// The time at which the current user joined the guild.
+	// This field is only present in GUILD_CREATE events and websocket
+	// update events, and thus is only present in state-cached guilds.
+	JoinedAt Timestamp `json:"joined_at"`
+
+	// Whether the guild is considered large. This is
+	// determined by a member threshold in the identify packet,
+	// and is currently hard-coded at 250 members in the library.
+	Large bool `json:"large"`
+
+	// Whether this guild is currently unavailable (most likely due to outage).
+	// This field is only present in GUILD_CREATE events and websocket
+	// update events, and thus is only present in state-cached guilds.
+	Unavailable bool `json:"unavailable"`
+
+	// The number of members in the guild.
+	// This field is only present in GUILD_CREATE events and websocket
+	// update events, and thus is only present in state-cached guilds.
+	MemberCount int `json:"member_count"`
+
+	// A list of voice states for the guild.
+	// This field is only present in GUILD_CREATE events and websocket
+	// update events, and thus is only present in state-cached guilds.
+	VoiceStates []*VoiceState `json:"voice_states"`
+
+	// A list of the members in the guild.
+	// This field is only present in GUILD_CREATE events and websocket
+	// update events, and thus is only present in state-cached guilds.
+	Members []*Member `json:"members"`
+
+	// A list of channels in the guild.
+	// This field is only present in GUILD_CREATE events and websocket
+	// update events, and thus is only present in state-cached guilds.
+	Channels []*Channel `json:"channels"`
+
+	// A list of partial presence objects for members in the guild.
+	// This field is only present in GUILD_CREATE events and websocket
+	// update events, and thus is only present in state-cached guilds.
+	Presences []*Presence `json:"presences"`
+
+	// The maximum number of presences for the guild (if nil, assume the default value, currently of 25000)
+	MaxPresences *int `json:"max_presences"`
+
+	// The maximum number of member fot the guild
+	MaxMembers int `json:"max_members"`
 
 	// the vanity url code for the guild
 	VanityURLCode string `json:"vanity_url_code"`
@@ -495,6 +507,21 @@ type Guild struct {
 
 	// The total number of users currently boosting this server
 	PremiumSubscriptionCount int `json:"premium_subscription_count"`
+
+	// Preferred Local for guild with "PUBLIC" feature. Defaults to "en_US"
+	PreferredLocale string `json:"preferred_locale"`
+
+	// Channel ID of the channel where guilds with "PUBLIC" feature receive notices from Discord
+	PublicUpdatesChannelID string `json:"public_updates_channel_id"`
+
+	// The maximum amount of users in video channel
+	MaxVideoChannelUsers int `json:"max_video_channel_users"`
+
+	// Approximate member count
+	ApproximateMemberCount int `json:"approximate_member_count"`
+
+	// Approximate presence count
+	ApproximatePresenceCount int `json:"approximate_presence_count"`
 }
 
 // IconURL returns a URL to the guild's icon.
@@ -584,15 +611,18 @@ func (r Roles) Swap(i, j int) {
 
 // A VoiceState stores the voice states of Guilds
 type VoiceState struct {
-	UserID    string `json:"user_id"`
-	SessionID string `json:"session_id"`
-	ChannelID string `json:"channel_id"`
-	GuildID   string `json:"guild_id"`
-	Suppress  bool   `json:"suppress"`
-	SelfMute  bool   `json:"self_mute"`
-	SelfDeaf  bool   `json:"self_deaf"`
-	Mute      bool   `json:"mute"`
-	Deaf      bool   `json:"deaf"`
+	GuildID    string  `json:"guild_id"`
+	ChannelID  string  `json:"channel_id"`
+	UserID     string  `json:"user_id"`
+	Member     *Member `json:"member"`
+	SessionID  string  `json:"session_id"`
+	Deaf       bool    `json:"deaf"`
+	Mute       bool    `json:"mute"`
+	SelfDeaf   bool    `json:"self_deaf"`
+	SelfMute   bool    `json:"self_mute"`
+	SelfStream bool    `json:"self_stream"`
+	SelfVideo  bool    `json:"self_video"`
+	Suppress   bool    `json:"suppress"`
 }
 
 // A Presence stores the online, offline, or idle and game status of Guild members.
@@ -600,7 +630,7 @@ type Presence struct {
 	User         *User        `json:"user"`
 	GuildID      string       `json:"guild_id"`
 	Status       Status       `json:"status"`
-	Activities   []*Activity   `json:"activities"`
+	Activities   []*Activity  `json:"activities"`
 	ClientStatus ClientStatus `json:"client_status"`
 }
 
@@ -617,21 +647,21 @@ const (
 )
 
 // A Activity struct holds the name of the "playing .." activity for a user
-type Activity struct { // TODO: Check if works
+type Activity struct {
 	Name          string       `json:"name"`
 	Type          ActivityType `json:"type"`
 	URL           string       `json:"url,omitempty"`
-	CreatedAt     int          `json:"created_at"` // TODO: Parse?
+	CreatedAt     int          `json:"created_at"`
 	TimeStamps    TimeStamps   `json:"timestamps,omitempty"`
 	ApplicationID string       `json:"application_id,omitempty"`
 	Details       string       `json:"details,omitempty"`
 	State         string       `json:"state,omitempty"`
-	Emiji         Emoji        `json:"emoji,omitempty"`
+	Emoji         Emoji        `json:"emoji,omitempty"`
 	Party         Party        `json:"party,omitempty"`
 	Assets        Assets       `json:"assets,omitempty"`
 	Secrets       Secrets      `json:"secrets,omitempty"`
 	Instance      bool         `json:"instance,omitempty"`
-	Flags         int          `json:"flags,omitempty"` // TODO: Flags
+	Flags         int          `json:"flags,omitempty"`
 }
 
 // A ClientStatus struct holds information about the users platform

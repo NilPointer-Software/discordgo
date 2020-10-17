@@ -121,6 +121,9 @@ func TestUserGuilds(t *testing.T) {
 }
 
 func TestUserSettings(t *testing.T) {
+	if envNoUserTests {
+		t.Skip("Skipping non-Bot related test")
+	}
 	if dg == nil {
 		t.Skip("Cannot TestUserSettings, dg not set.")
 	}
@@ -132,6 +135,9 @@ func TestUserSettings(t *testing.T) {
 }
 
 func TestUserUpdateStatus(t *testing.T) {
+	if envNoUserTests {
+		t.Skip("Skipping, non-Bot related test")
+	}
 	if dg == nil {
 		t.Skip("Cannot TestUserSettings, dg not set.")
 	}
@@ -144,7 +150,9 @@ func TestUserUpdateStatus(t *testing.T) {
 
 // TestLogout tests the Logout() function. This should not return an error.
 func TestLogout(t *testing.T) {
-
+	if envNoUserTests {
+		t.Skip("Skipping, non-Bot related test")
+	}
 	if dg == nil {
 		t.Skip("Cannot TestLogout, dg not set.")
 	}
@@ -178,7 +186,9 @@ func TestGatewayBot(t *testing.T) {
 }
 
 func TestVoiceICE(t *testing.T) {
-
+	if envNoUserTests {
+		t.Skip("Skipping, non-Bot related test")
+	}
 	if dg == nil {
 		t.Skip("Skipping, dg not set.")
 	}

@@ -600,6 +600,16 @@ func (s *Session) Guild(guildID string) (st *Guild, err error) {
 	return
 }
 
+func (s *Session) GuildWithCounts(guildID string) (st *Guild, err error) {
+	body, err := s.RequestWithBucketID("GET", EndpointGuild(guildID) + "?with_counts=true", nil, EndpointGuild(guildID))
+	if err != nil {
+		return
+	}
+
+	err = unmarshal(body, &st)
+	return
+}
+
 // GuildCreate creates a new Guild
 // name      : A name for the Guild (2-100 characters)
 func (s *Session) GuildCreate(name string) (st *Guild, err error) {
@@ -703,18 +713,18 @@ func (s *Session) GuildBanCreate(guildID, userID string, days int) (err error) {
 	return s.GuildBanCreateWithReason(guildID, userID, "", days)
 }
 
-// GuildBanCreateWithReason bans the given user from the given guild also providing a reaso.
+// GuildBanCreateWithReason bans the given user from the given guild also providing a reason.
 // guildID   : The ID of a Guild.
 // userID    : The ID of a User
 // reason    : The reason for this ban
-// days      : The number of days of previous comments to delete.
+// days      : The number of days of previous comments to delete (0-7).
 func (s *Session) GuildBanCreateWithReason(guildID, userID, reason string, days int) (err error) {
 
 	uri := EndpointGuildBan(guildID, userID)
 
 	queryParams := url.Values{}
 	if days > 0 {
-		queryParams.Set("delete-message-days", strconv.Itoa(days))
+		queryParams.Set("delete_message_days", strconv.Itoa(days))
 	}
 	if reason != "" {
 		queryParams.Set("reason", reason)
@@ -1269,12 +1279,11 @@ func (s *Session) GuildWidget(guildID string) (st *GuildWidget, err error) {
 	return
 }
 
-// GuildEmbedEdit returns the widget for a Guild.
+// GuildWidgetEdit returns the widget for a Guild.
 // guildID   : The ID of a Guild.
 // enabled   : Whether the widget is enabled.
 // channelID : The widget Channel ID
-func (s *Session) GuildEmbedEdit(guildID string, enabled bool, channelID string) (st *GuildWidget, err error) {
-
+func (s *Session) GuildWidgetEdit(guildID string, enabled bool, channelID string) (st *GuildWidget, err error) {
 	data := GuildWidget{enabled, channelID}
 
 	body, err := s.RequestWithBucketID("PATCH", EndpointGuildWidget(guildID), data, EndpointGuildWidget(guildID))
@@ -1285,6 +1294,9 @@ func (s *Session) GuildEmbedEdit(guildID string, enabled bool, channelID string)
 	err = unmarshal(body, &st)
 	return
 }
+
+// GuildWidgetImage returns bytes for a Guild Widget image
+// TODO: Implement
 
 // GuildAuditLog returns the audit log for a Guild.
 // guildID     : The ID of a Guild.
