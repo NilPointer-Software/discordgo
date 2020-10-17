@@ -642,6 +642,7 @@ const (
 	ActivityTypeGame ActivityType = iota
 	ActivityTypeStreaming
 	ActivityTypeListening
+	ActivityTypeWatching
 	ActivityTypeCustom
 	ActivityTypeCompeting
 )
@@ -656,12 +657,18 @@ type Activity struct {
 	ApplicationID string       `json:"application_id,omitempty"`
 	Details       string       `json:"details,omitempty"`
 	State         string       `json:"state,omitempty"`
-	Emoji         Emoji        `json:"emoji,omitempty"`
+	Emoji         GatewayEmoji `json:"emoji,omitempty"`
 	Party         Party        `json:"party,omitempty"`
 	Assets        Assets       `json:"assets,omitempty"`
 	Secrets       Secrets      `json:"secrets,omitempty"`
 	Instance      bool         `json:"instance,omitempty"`
 	Flags         int          `json:"flags,omitempty"`
+}
+
+type GatewayEmoji struct {
+	ID       *string `json:"id"`
+	Name     *string `json:"name"`
+	Animated *bool   `json:"animated,omitempty"`
 }
 
 // A ClientStatus struct holds information about the users platform
