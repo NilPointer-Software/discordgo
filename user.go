@@ -58,7 +58,6 @@ const (
 	PremiumTypeNitro
 )
 
-
 // String returns a unique identifier of the form username#discriminator
 func (u *User) String() string {
 	return u.Username + "#" + u.Discriminator

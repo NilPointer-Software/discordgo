@@ -36,15 +36,15 @@ type Event struct {
 
 // A Ready stores all data for the websocket READY event.
 type Ready struct {
-	Version         int          `json:"v"`
-	User            *User        `json:"user"`
-	PrivateChannels []*Channel   `json:"private_channels"`
-	Guilds          []*Guild     `json:"guilds"`
-	SessionID       string       `json:"session_id"`
-	Shard           []int        `json:"shard"`
+	Version         int        `json:"v"`
+	User            *User      `json:"user"`
+	PrivateChannels []*Channel `json:"private_channels"`
+	Guilds          []*Guild   `json:"guilds"`
+	SessionID       string     `json:"session_id"`
+	Shard           []int      `json:"shard"`
 
 	// Undocumented fields
-	ReadState       []*ReadState `json:"read_state"`
+	ReadState         []*ReadState         `json:"read_state"`
 	Settings          *Settings            `json:"user_settings"`
 	UserGuildSettings []*UserGuildSettings `json:"user_guild_settings"`
 	Relationships     []*Relationship      `json:"relationships"`

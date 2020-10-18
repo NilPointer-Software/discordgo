@@ -34,7 +34,7 @@ const (
 	MessageTypeUserPremiumGuildSubscriptionTierThree
 	MessageTypeChannelFollowAdd
 	MessageTypeGuildDiscoveryDisqualified = 14
-	MessageTypeGuildDiscoveryRequalified = 15
+	MessageTypeGuildDiscoveryRequalified  = 15
 )
 
 // A Message stores all data related to a specific Discord message.
@@ -214,9 +214,9 @@ type MessageEmbedThumbnail struct {
 
 // MessageEmbedVideo is a part of a MessageEmbed struct.
 type MessageEmbedVideo struct {
-	URL      string `json:"url,omitempty"`
-	Height   int    `json:"height,omitempty"`
-	Width    int    `json:"width,omitempty"`
+	URL    string `json:"url,omitempty"`
+	Height int    `json:"height,omitempty"`
+	Width  int    `json:"width,omitempty"`
 }
 
 // MessageEmbedProvider is a part of a MessageEmbed struct.

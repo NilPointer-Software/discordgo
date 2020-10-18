@@ -157,7 +157,7 @@ func (s *Session) RequestWithLockedBucket(method, urlStr, contentType string, b 
 		s.log(LogInformational, "Rate Limiting %s, retry in %f", urlStr, rl.RetryAfter)
 		s.handleEvent(rateLimitEventType, RateLimit{TooManyRequests: &rl, URL: urlStr})
 
-		time.Sleep(time.Duration(rl.RetryAfter)*time.Second)
+		time.Sleep(time.Duration(rl.RetryAfter) * time.Second)
 		// we can make the above smarter
 		// this method can cause longer delays than required
 
@@ -591,7 +591,7 @@ func (s *Session) Guild(guildID string) (st *Guild, err error) {
 // GuildWithCounts returns a Guild structure of a specific Guild with extra approximate member and presence counts.
 // guildID   : The ID of a Guild
 func (s *Session) GuildWithCounts(guildID string) (st *Guild, err error) {
-	body, err := s.RequestWithBucketID("GET", EndpointGuild(guildID) + "?with_counts=true", nil, EndpointGuild(guildID))
+	body, err := s.RequestWithBucketID("GET", EndpointGuild(guildID)+"?with_counts=true", nil, EndpointGuild(guildID))
 	if err != nil {
 		return
 	}
@@ -1061,10 +1061,10 @@ func (s *Session) GuildRoleEdit(guildID, roleID, name string, color int, hoist b
 		return nil, fmt.Errorf("color value cannot be larger than 0xFFFFFF")
 	}
 	data := GuildRoleData{
-		Name: name,
+		Name:        name,
 		Permissions: perm,
-		Color: color,
-		Hoist: &hoist,
+		Color:       color,
+		Hoist:       &hoist,
 		Mentionable: &mention,
 	}
 
@@ -1838,8 +1838,8 @@ func (s *Session) ChannelInviteCreate(channelID string, i Invite, unique bool) (
 func (s *Session) ChannelPermissionSet(channelID, targetID string, targetType, allow, deny int) (err error) {
 	data := PermissionOverwrite{
 		Allow: allow,
-		Deny: deny,
-		Type: PermissionOverwriteType(targetType),
+		Deny:  deny,
+		Type:  PermissionOverwriteType(targetType),
 	}
 
 	_, err = s.RequestWithBucketID("PUT", EndpointChannelPermission(channelID, targetID), data, EndpointChannelPermission(channelID, ""))
