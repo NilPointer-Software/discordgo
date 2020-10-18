@@ -7,50 +7,53 @@ package discordgo
 // Event type values are used to match the events returned by Discord.
 // EventTypes surrounded by __ are synthetic and are internal to DiscordGo.
 const (
-	channelCreateEventType            = "CHANNEL_CREATE"
-	channelDeleteEventType            = "CHANNEL_DELETE"
-	channelPinsUpdateEventType        = "CHANNEL_PINS_UPDATE"
-	channelUpdateEventType            = "CHANNEL_UPDATE"
-	connectEventType                  = "__CONNECT__"
-	disconnectEventType               = "__DISCONNECT__"
-	eventEventType                    = "__EVENT__"
-	guildBanAddEventType              = "GUILD_BAN_ADD"
-	guildBanRemoveEventType           = "GUILD_BAN_REMOVE"
-	guildCreateEventType              = "GUILD_CREATE"
-	guildDeleteEventType              = "GUILD_DELETE"
-	guildEmojisUpdateEventType        = "GUILD_EMOJIS_UPDATE"
-	guildIntegrationsUpdateEventType  = "GUILD_INTEGRATIONS_UPDATE"
-	guildMemberAddEventType           = "GUILD_MEMBER_ADD"
-	guildMemberRemoveEventType        = "GUILD_MEMBER_REMOVE"
-	guildMemberUpdateEventType        = "GUILD_MEMBER_UPDATE"
-	guildMembersChunkEventType        = "GUILD_MEMBERS_CHUNK"
-	guildRoleCreateEventType          = "GUILD_ROLE_CREATE"
-	guildRoleDeleteEventType          = "GUILD_ROLE_DELETE"
-	guildRoleUpdateEventType          = "GUILD_ROLE_UPDATE"
-	guildUpdateEventType              = "GUILD_UPDATE"
-	messageAckEventType               = "MESSAGE_ACK"
-	messageCreateEventType            = "MESSAGE_CREATE"
-	messageDeleteEventType            = "MESSAGE_DELETE"
-	messageDeleteBulkEventType        = "MESSAGE_DELETE_BULK"
-	messageReactionAddEventType       = "MESSAGE_REACTION_ADD"
-	messageReactionRemoveEventType    = "MESSAGE_REACTION_REMOVE"
-	messageReactionRemoveAllEventType = "MESSAGE_REACTION_REMOVE_ALL"
-	messageUpdateEventType            = "MESSAGE_UPDATE"
-	presenceUpdateEventType           = "PRESENCE_UPDATE"
-	presencesReplaceEventType         = "PRESENCES_REPLACE"
-	rateLimitEventType                = "__RATE_LIMIT__"
-	readyEventType                    = "READY"
-	relationshipAddEventType          = "RELATIONSHIP_ADD"
-	relationshipRemoveEventType       = "RELATIONSHIP_REMOVE"
-	resumedEventType                  = "RESUMED"
-	typingStartEventType              = "TYPING_START"
-	userGuildSettingsUpdateEventType  = "USER_GUILD_SETTINGS_UPDATE"
-	userNoteUpdateEventType           = "USER_NOTE_UPDATE"
-	userSettingsUpdateEventType       = "USER_SETTINGS_UPDATE"
-	userUpdateEventType               = "USER_UPDATE"
-	voiceServerUpdateEventType        = "VOICE_SERVER_UPDATE"
-	voiceStateUpdateEventType         = "VOICE_STATE_UPDATE"
-	webhooksUpdateEventType           = "WEBHOOKS_UPDATE"
+	channelCreateEventType              = "CHANNEL_CREATE"
+	channelDeleteEventType              = "CHANNEL_DELETE"
+	channelPinsUpdateEventType          = "CHANNEL_PINS_UPDATE"
+	channelUpdateEventType              = "CHANNEL_UPDATE"
+	connectEventType                    = "__CONNECT__"
+	disconnectEventType                 = "__DISCONNECT__"
+	eventEventType                      = "__EVENT__"
+	guildBanAddEventType                = "GUILD_BAN_ADD"
+	guildBanRemoveEventType             = "GUILD_BAN_REMOVE"
+	guildCreateEventType                = "GUILD_CREATE"
+	guildDeleteEventType                = "GUILD_DELETE"
+	guildEmojisUpdateEventType          = "GUILD_EMOJIS_UPDATE"
+	guildIntegrationsUpdateEventType    = "GUILD_INTEGRATIONS_UPDATE"
+	guildMemberAddEventType             = "GUILD_MEMBER_ADD"
+	guildMemberRemoveEventType          = "GUILD_MEMBER_REMOVE"
+	guildMemberUpdateEventType          = "GUILD_MEMBER_UPDATE"
+	guildMembersChunkEventType          = "GUILD_MEMBERS_CHUNK"
+	guildRoleCreateEventType            = "GUILD_ROLE_CREATE"
+	guildRoleDeleteEventType            = "GUILD_ROLE_DELETE"
+	guildRoleUpdateEventType            = "GUILD_ROLE_UPDATE"
+	guildUpdateEventType                = "GUILD_UPDATE"
+	messageAckEventType                 = "MESSAGE_ACK"
+	messageCreateEventType              = "MESSAGE_CREATE"
+	messageDeleteEventType              = "MESSAGE_DELETE"
+	messageDeleteBulkEventType          = "MESSAGE_DELETE_BULK"
+	messageReactionAddEventType         = "MESSAGE_REACTION_ADD"
+	messageReactionRemoveEventType      = "MESSAGE_REACTION_REMOVE"
+	messageReactionRemoveAllEventType   = "MESSAGE_REACTION_REMOVE_ALL"
+	messageReactionRemoveEmojiEventType = "MESSAGE_REACTION_REMOVE_EMOJI"
+	messageUpdateEventType              = "MESSAGE_UPDATE"
+	presenceUpdateEventType             = "PRESENCE_UPDATE"
+	presencesReplaceEventType           = "PRESENCES_REPLACE"
+	rateLimitEventType                  = "__RATE_LIMIT__"
+	readyEventType                      = "READY"
+	relationshipAddEventType            = "RELATIONSHIP_ADD"
+	relationshipRemoveEventType         = "RELATIONSHIP_REMOVE"
+	resumedEventType                    = "RESUMED"
+	typingStartEventType                = "TYPING_START"
+	userGuildSettingsUpdateEventType    = "USER_GUILD_SETTINGS_UPDATE"
+	userNoteUpdateEventType             = "USER_NOTE_UPDATE"
+	userSettingsUpdateEventType         = "USER_SETTINGS_UPDATE"
+	userUpdateEventType                 = "USER_UPDATE"
+	voiceServerUpdateEventType          = "VOICE_SERVER_UPDATE"
+	voiceStateUpdateEventType           = "VOICE_STATE_UPDATE"
+	webhooksUpdateEventType             = "WEBHOOKS_UPDATE"
+	inviteCreateEventType               = "INVITE_CREATE"
+	inviteDeleteEventType               = "INVITE_DELETE"
 )
 
 // channelCreateEventHandler is an event handler for ChannelCreate events.
@@ -913,6 +916,66 @@ func (eh webhooksUpdateEventHandler) Handle(s *Session, i interface{}) {
 	}
 }
 
+// messageReactionRemoveEmojiEventHandler is an event handler for MessageReactionRemoveEmoji events.
+type messageReactionRemoveEmojiEventHandler func(*Session, *MessageReactionRemoveEmoji)
+
+// Type returns the event type for MessageReactionRemoveEmoji events.
+func (eh messageReactionRemoveEmojiEventHandler) Type() string {
+	return messageReactionRemoveEmojiEventType
+}
+
+// New returns a new instance of MessageReactionRemoveEmoji.
+func (eh messageReactionRemoveEmojiEventHandler) New() interface{} {
+	return &MessageReactionRemoveEmoji{}
+}
+
+// Handle is the handler for MessageReactionRemoveEmoji events.
+func (eh messageReactionRemoveEmojiEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*MessageReactionRemoveEmoji); ok {
+		eh(s, t)
+	}
+}
+
+// inviteCreateEventHandler is an event handler for InviteCreate events.
+type inviteCreateEventHandler func(*Session, *InviteCreate)
+
+// Type returns the event type for InviteCreate events.
+func (eh inviteCreateEventHandler) Type() string {
+	return inviteCreateEventType
+}
+
+// New returns a new instance of InviteCreate.
+func (eh inviteCreateEventHandler) New() interface{} {
+	return &InviteCreate{}
+}
+
+// Handle is the handler for InviteCreate events.
+func (eh inviteCreateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*InviteCreate); ok {
+		eh(s, t)
+	}
+}
+
+// inviteDeleteEventHandler is an event handler for InviteDelete events.
+type inviteDeleteEventHandler func(*Session, *InviteDelete)
+
+// Type returns the event type for InviteDelete events.
+func (eh inviteDeleteEventHandler) Type() string {
+	return inviteDeleteEventType
+}
+
+// New returns a new instance of InviteDelete.
+func (eh inviteDeleteEventHandler) New() interface{} {
+	return &InviteDelete{}
+}
+
+// Handle is the handler for InviteDelete events.
+func (eh inviteDeleteEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*InviteDelete); ok {
+		eh(s, t)
+	}
+}
+
 func handlerForInterface(handler interface{}) EventHandler {
 	switch v := handler.(type) {
 	case func(*Session, interface{}):
@@ -1005,6 +1068,12 @@ func handlerForInterface(handler interface{}) EventHandler {
 		return voiceStateUpdateEventHandler(v)
 	case func(*Session, *WebhooksUpdate):
 		return webhooksUpdateEventHandler(v)
+	case func(*Session, *MessageReactionRemoveEmoji):
+		return messageReactionRemoveEmojiEventHandler(v)
+	case func(*Session, *InviteCreate):
+		return inviteCreateEventHandler(v)
+	case func(*Session, *InviteDelete):
+		return inviteDeleteEventHandler(v)
 	}
 
 	return nil
@@ -1051,4 +1120,7 @@ func init() {
 	registerInterfaceProvider(voiceServerUpdateEventHandler(nil))
 	registerInterfaceProvider(voiceStateUpdateEventHandler(nil))
 	registerInterfaceProvider(webhooksUpdateEventHandler(nil))
+	registerInterfaceProvider(messageReactionRemoveEmojiEventHandler(nil))
+	registerInterfaceProvider(inviteCreateEventHandler(nil))
+	registerInterfaceProvider(inviteDeleteEventHandler(nil))
 }

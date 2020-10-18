@@ -1,6 +1,7 @@
 package discordgo
 
 import (
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -168,7 +169,7 @@ func (b *Bucket) Release(headers http.Header) error {
 			return err
 		}
 
-		unix, err := strconv.ParseInt(reset, 10, 64)
+		fUnix, err := strconv.ParseFloat(reset, 64)
 		if err != nil {
 			return err
 		}
@@ -177,7 +178,8 @@ func (b *Bucket) Release(headers http.Header) error {
 		// some extra time is added because without it i still encountered 429's.
 		// The added amount is the lowest amount that gave no 429's
 		// in 1k requests
-		delta := time.Unix(unix, 0).Sub(discordTime) + time.Millisecond*250
+		unix, precision := math.Modf(fUnix)
+		delta := time.Unix(int64(unix), (time.Duration(precision)*time.Second).Nanoseconds()).Sub(discordTime) + time.Millisecond*250
 		b.reset = time.Now().Add(delta)
 	}
 
