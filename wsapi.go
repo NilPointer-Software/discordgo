@@ -402,7 +402,7 @@ func (s *Session) UpdateCompetingStatus(content string) (err error) {
 // If content!="", then status is set
 // If emoji is invalid, then the "Watching {content}" status is set
 // Else, status is set to nothing
-//func (s *Session) UpdateCustomStatus(emojiID *string, emojiName string, content string) (err error) { // TODO: Make it work
+//func (s *Session) UpdateCustomStatus(emojiID *string, emojiName string, content string) (err error) { // This works, but not status is shown in the client
 //	f := false
 //	return s.UpdateStatusComplex(UpdateStatusData{
 //		Status: "online",

@@ -903,7 +903,7 @@ func (s *State) OnInterface(se *Session, i interface{}) (err error) {
 		}
 	case *PresenceUpdate:
 		if s.TrackPresences {
-			s.PresenceAdd(t.GuildID, &t.Presence)
+			s.PresenceAdd(t.GuildID, t.Presence)
 		}
 		if s.TrackMembers {
 			if t.Status == StatusOffline {
@@ -918,17 +918,12 @@ func (s *State) OnInterface(se *Session, i interface{}) (err error) {
 				m = &Member{
 					GuildID: t.GuildID,
 					User:    t.User,
-					Roles:   t.Roles,
 				}
 
 			} else {
 				if t.User.Username != "" {
 					m.User.Username = t.User.Username
 				}
-
-				// PresenceUpdates always contain a list of roles, so there's no need to check for an empty list here
-				m.Roles = t.Roles
-
 			}
 
 			err = s.MemberAdd(m)

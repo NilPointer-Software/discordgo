@@ -35,6 +35,7 @@ const (
 	messageReactionAddEventType         = "MESSAGE_REACTION_ADD"
 	messageReactionRemoveEventType      = "MESSAGE_REACTION_REMOVE"
 	messageReactionRemoveAllEventType   = "MESSAGE_REACTION_REMOVE_ALL"
+	messageReactionRemoveEmojiEventType = "MESSAGE_REACTION_REMOVE_EMOJI"
 	messageUpdateEventType              = "MESSAGE_UPDATE"
 	presenceUpdateEventType             = "PRESENCE_UPDATE"
 	presencesReplaceEventType           = "PRESENCES_REPLACE"
@@ -53,7 +54,6 @@ const (
 	webhooksUpdateEventType             = "WEBHOOKS_UPDATE"
 	inviteCreateEventType               = "INVITE_CREATE"
 	inviteDeleteEventType               = "INVITE_DELETE"
-	messageReactionRemoveEmojiEventType = "MESSAGE_REACTION_REMOVE_EMOJI"
 )
 
 // channelCreateEventHandler is an event handler for ChannelCreate events.

@@ -301,6 +301,12 @@ type ChannelEdit struct {
 	ParentID             string                 `json:"parent_id,omitempty"`
 }
 
+// FollowChannel structure holds information from ChannelFollow function
+type FollowChannel struct {
+	ChannelID string `json:"channel_id"`
+	WebHookID string `json:"webhook_id"`
+}
+
 // A PermissionOverwrite holds permission overwrite data for a Channel
 type PermissionOverwrite struct {
 	ID    string                  `json:"id"`
@@ -583,6 +589,20 @@ type GuildParams struct {
 	PreferredLocale             string                     `json:"preferred_locale,omitempty"`
 }
 
+// A short summary of a discoverable guild available to anyone
+type GuildPreview struct {
+	ID                       string   `json:"id"`
+	Name                     string   `json:"name"`
+	Icon                     string   `json:"icon"`
+	Splash                   string   `json:"splash"`
+	DiscoverySplash          string   `json:"discovery_splash"`
+	Emojis                   []*Emoji `json:"emojis"`
+	Features                 []string `json:"features"`
+	ApproximateMemberCount   int      `json:"approximate_member_count"`
+	ApproximatePresenceCount int      `json:"approximate_presence_count"`
+	Description              string   `json:"description"`
+}
+
 // A Role stores information about Discord guild member roles.
 type Role struct {
 	// The ID of the role.
@@ -733,8 +753,8 @@ type Assets struct {
 
 // An Party struct contains the id and size of a party used in rich presence Activity
 type Party struct {
-	ID    string `json:"id,omitempty"`
-	Size []int   `json:"size,omitempty"`
+	ID   string `json:"id,omitempty"`
+	Size []int  `json:"size,omitempty"`
 }
 
 // An Secrets struct contains secrets for rich presence Activity
@@ -1015,17 +1035,17 @@ type MessageReaction struct {
 	MessageID string  `json:"message_id"`
 	GuildID   string  `json:"guild_id,omitempty"`
 	Member    *Member `json:"member"`
-	Emoji     *Emoji   `json:"emoji"`
+	Emoji     *Emoji  `json:"emoji"`
 }
 
 // GatewayBotResponse stores the data for the gateway/bot response
 type GatewayBotResponse struct {
-	URL               string `json:"url"`
+	URL               string            `json:"url"`
 	Shards            int               `json:"shards"`
 	SessionStartLimit SessionStartLimit `json:"session_start_limit"`
 }
 
-type SessionStartLimit struct{
+type SessionStartLimit struct {
 	Total      int   `json:"total"`
 	Remaining  int   `json:"remaining"`
 	ResetAfter int64 `json:"reset_after"`
