@@ -1835,11 +1835,11 @@ func (s *Session) ChannelInviteCreate(channelID string, i Invite, unique bool) (
 // ChannelPermissionSet creates a Permission Override for the given channel.
 // NOTE: This func name may changed.  Using Set instead of Create because
 // you can both create a new override or update an override with this function.
-func (s *Session) ChannelPermissionSet(channelID, targetID string, targetType, allow, deny int) (err error) {
+func (s *Session) ChannelPermissionSet(channelID, targetID string, targetType PermissionOverwriteType, allow, deny int) (err error) {
 	data := PermissionOverwrite{
 		Allow: allow,
 		Deny:  deny,
-		Type:  PermissionOverwriteType(targetType),
+		Type:  targetType,
 	}
 
 	_, err = s.RequestWithBucketID("PUT", EndpointChannelPermission(channelID, targetID), data, EndpointChannelPermission(channelID, ""))
