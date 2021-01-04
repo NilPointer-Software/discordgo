@@ -137,7 +137,7 @@ type MessageSend struct {
 	Tts             bool          `json:"tts"`
 	Embed           *MessageEmbed `json:"embed,omitempty"`
 	PayloadJSON     string        `json:"payload_json"`
-	AllowedMentions AllowMention  `json:"allowed_mentions"`
+	AllowedMentions *AllowMention  `json:"allowed_mentions,omitempty"`
 	Files           []*File       `json:"-"` // TODO: ? File???
 
 	// TODO: Remove this when compatibility is not required.
