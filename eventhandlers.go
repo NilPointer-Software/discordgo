@@ -54,6 +54,7 @@ const (
 	webhooksUpdateEventType             = "WEBHOOKS_UPDATE"
 	inviteCreateEventType               = "INVITE_CREATE"
 	inviteDeleteEventType               = "INVITE_DELETE"
+	interactionCreateEventType          = "INTERACTION_CREATE"
 )
 
 // channelCreateEventHandler is an event handler for ChannelCreate events.
@@ -976,6 +977,26 @@ func (eh inviteDeleteEventHandler) Handle(s *Session, i interface{}) {
 	}
 }
 
+// interactionCreateEventHandler is an event handler for InteractionCreate events.
+type interactionCreateEventHandler func(*Session, *Interaction)
+
+// Type returns the event type for InteractionCreate events.
+func (eh interactionCreateEventHandler) Type() string {
+	return interactionCreateEventType
+}
+
+// New returns a new instance of InteractionCreate.
+func (eh interactionCreateEventHandler) New() interface{} {
+	return &Interaction{}
+}
+
+// Handle is the handler for InteractionCreate events.
+func (eh interactionCreateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*Interaction); ok {
+		eh(s, t)
+	}
+}
+
 func handlerForInterface(handler interface{}) EventHandler {
 	switch v := handler.(type) {
 	case func(*Session, interface{}):
@@ -1074,6 +1095,8 @@ func handlerForInterface(handler interface{}) EventHandler {
 		return inviteCreateEventHandler(v)
 	case func(*Session, *InviteDelete):
 		return inviteDeleteEventHandler(v)
+	case func(*Session, *Interaction):
+		return interactionCreateEventHandler(v)
 	}
 
 	return nil
@@ -1123,4 +1146,5 @@ func init() {
 	registerInterfaceProvider(messageReactionRemoveEmojiEventHandler(nil))
 	registerInterfaceProvider(inviteCreateEventHandler(nil))
 	registerInterfaceProvider(inviteDeleteEventHandler(nil))
+	registerInterfaceProvider(interactionCreateEventHandler(nil))
 }
