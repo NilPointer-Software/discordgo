@@ -1051,6 +1051,95 @@ type SessionStartLimit struct {
 	ResetAfter int64 `json:"reset_after"`
 }
 
+type ApplicationCommand struct {
+	ID            string                      `json:"id,omitempty"`
+	ApplicationID string                      `json:"application_id,omitempty"`
+	Name          string                      `json:"name"`
+	Description   string                      `json:"description"`
+	Options       *[]ApplicationCommandOption `json:"options,omitempty"`
+}
+
+type ApplicationCommandOption struct {
+	Type        ApplicationCommandOptionType      `json:"type"`
+	Name        string                            `json:"name"`
+	Description string                            `json:"description"`
+	Default     bool                              `json:"default,omitempty"`
+	Required    bool                              `json:"required,omitempty"`
+	Choices     *[]ApplicationCommandOptionChoice `json:"choices,omitempty"`
+	Options     *[]ApplicationCommandOption       `json:"options,omitempty"`
+}
+
+type ApplicationCommandOptionType int
+
+type ApplicationCommandOptionChoice struct {
+	Name         string `json:"name"`
+	StringValue  string `json:"value,omitempty"`
+	IntegerValue string `json:"value,omitempty"`
+}
+
+type Interaction struct {
+	ID        string                            `json:"id"`
+	Type      InteractionType                   `json:"type"`
+	Data      ApplicationCommandInteractionData `json:"data"`
+	GuildID   string                            `json:"guild_id"`
+	ChannelID string                            `json:"channel_id"`
+	Member    Member                            `json:"member"`
+	Token     string                            `json:"token"`
+	Version   int                               `json:"version"`
+}
+
+type InteractionType int
+
+const (
+	InteractionTypePing InteractionType = iota + 1
+	InteractionTypeApplicationCommand
+)
+
+type ApplicationCommandInteractionData struct {
+	ID      string                                     `json:"id"`
+	Name    string                                     `json:"name"`
+	Options *[]ApplicationCommandInteractionDataOption `json:"options"`
+}
+
+type ApplicationCommandInteractionDataOption struct {
+	Name    string                                     `json:"name"`
+	Value   interface{}                                `json:"value"` // =/ Oh god, this will be VERY FUNNY to handle ~MBSA
+	Options *[]ApplicationCommandInteractionDataOption `json:"options"`
+}
+
+type InteractionResponse struct {
+	Type InteractionResponseType                    `json:"type"`
+	Data *InteractionApplicationCommandCallbackData `json:"data,omitempty"`
+}
+
+type InteractionResponseType int
+
+const (
+	InteractionResponseTypePong InteractionResponseType = iota + 1
+	InteractionResponseTypeAcknowledge
+	InteractionResponseTypeChannelMessage
+	InteractionResponseTypeChannelMessageWithSource
+	InteractionResponseTypeAcknowledgeWithSource
+)
+
+type InteractionApplicationCommandCallbackData struct {
+	TTS             bool            `json:"tts,omitempty"`
+	Content         string          `json:"content"`
+	Embeds          *[]MessageEmbed `json:"embeds,omitempty"`
+	AllowedMentions *AllowMention   `json:"allowed_mentions,omitempty"` // TODO: Fix AllowMention in the fork
+}
+
+const (
+	OptionTypeSubCommand ApplicationCommandOptionType = iota + 1
+	OptionTypeSubCommandGroup
+	OptionTypeString
+	OptionTypeInteger
+	OptionTypeBoolean
+	OptionTypeUser
+	OptionTypeChannel
+	OptionTypeRole
+)
+
 // Constants for the different bit offsets of text channel permissions
 const (
 	PermissionReadMessages = 1 << (iota + 10)

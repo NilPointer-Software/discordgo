@@ -150,8 +150,18 @@ var (
 	EndpointEmojiAnimated = func(eID string) string { return EndpointAPI + "emojis/" + eID + ".gif" }
 
 	EndpointOauth2            = EndpointAPI + "oauth2/"
-	EndpointApplications      = EndpointOauth2 + "applications"
-	EndpointApplication       = func(aID string) string { return EndpointApplications + "/" + aID }
-	EndpointApplicationsBot   = func(aID string) string { return EndpointApplications + "/" + aID + "/bot" }
-	EndpointApplicationAssets = func(aID string) string { return EndpointApplications + "/" + aID + "/assets" }
+	EndpointOAuthApplications = EndpointOauth2 + "applications"
+
+	EndpointOAuthApplication       = func(aID string) string { return EndpointOAuthApplications + "/" + aID }
+	EndpointOAuthApplicationsBot   = func(aID string) string { return EndpointOAuthApplications + "/" + aID + "/bot" }
+	EndpointOAuthApplicationAssets = func(aID string) string { return EndpointOAuthApplications + "/" + aID + "/assets" }
+
+	EndpointApplication = EndpointAPI + "applications/"
+	EndpointInteraction = EndpointAPI + "interactions/"
+
+	EndpointGlobalApplicationCommands = func(aid string) string { return EndpointApplication + aid + "/commands" }
+	EndpointGlobalApplicationCommand  = func(aid, cid string) string { return EndpointApplication + aid + "/commands/" + cid }
+	EndpointGuildApplicationCommands  = func(aid, gid string) string { return EndpointApplication + aid + "/guilds/" + gid + "/commands" }
+	EndpointGuildApplicationCommand   = func(aid, gid, cid string) string { return EndpointApplication + aid + "/guilds/" + gid + "/commands/" + cid }
+	EndpointInteractionResponse       = func(id, token string) string { return EndpointInteraction + id + "/" + token + "/callback" }
 )
