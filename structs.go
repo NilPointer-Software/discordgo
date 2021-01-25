@@ -1126,6 +1126,7 @@ type InteractionApplicationCommandCallbackData struct {
 	Content         string          `json:"content"`
 	Embeds          *[]MessageEmbed `json:"embeds,omitempty"`
 	AllowedMentions *AllowMention   `json:"allowed_mentions,omitempty"` // TODO: Fix AllowMention in the fork
+	Flags		int		`json:"flags,omitempty"`
 }
 
 const (
