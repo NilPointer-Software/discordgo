@@ -1072,9 +1072,8 @@ type ApplicationCommandOption struct {
 type ApplicationCommandOptionType int
 
 type ApplicationCommandOptionChoice struct {
-	Name         string `json:"name"`
-	StringValue  string `json:"value,omitempty"`
-	IntegerValue string `json:"value,omitempty"`
+	Name  string      `json:"name"`
+	Value interface{} `json:"value,omitempty"`
 }
 
 type Interaction struct {
