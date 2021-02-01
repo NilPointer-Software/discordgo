@@ -164,7 +164,7 @@ var (
 	EndpointGuildApplicationCommands   = func(aid, gid string) string { return EndpointApplication + aid + "/guilds/" + gid + "/commands" }
 	EndpointGuildApplicationCommand    = func(aid, gid, cid string) string { return EndpointApplication + aid + "/guilds/" + gid + "/commands/" + cid }
 	EndpointInteractionResponse        = func(id, token string) string { return EndpointInteraction + id + "/" + token + "/callback" }
-	EndpointInteractionOriginal        = func(aid, token string) string { return EndpointWebhooks + aid + "/" + token + "/@original" }
+	EndpointInteractionOriginal        = func(aid, token string) string { return EndpointWebhooks + aid + "/" + token + "/messages/@original" }
 	EndpointInteractionFollowup        = func(aid, token string) string { return EndpointWebhooks + aid + "/" + token  }
 	EndpointInteractionFollowupMessage = func(aid, token, mid string) string { return EndpointWebhooks + aid + "/" + token + "/messages/" + mid }
 )
