@@ -133,12 +133,13 @@ type File struct {
 
 // MessageSend stores all parameters you can send with ChannelMessageSendComplex.
 type MessageSend struct {
-	Content         string        `json:"content,omitempty"`
-	Tts             bool          `json:"tts"`
-	Embed           *MessageEmbed `json:"embed,omitempty"`
-	PayloadJSON     string        `json:"payload_json"`
-	AllowedMentions *AllowMention  `json:"allowed_mentions,omitempty"`
-	Files           []*File       `json:"-"` // TODO: ? File???
+	Content          string            `json:"content,omitempty"`
+	Tts              bool              `json:"tts"`
+	Embed            *MessageEmbed     `json:"embed,omitempty"`
+	PayloadJSON      string            `json:"payload_json"`
+	AllowedMentions  *AllowMention     `json:"allowed_mentions,omitempty"`
+	Files            []*File       	   `json:"-"` // TODO: ? File???
+	MessageReference *MessageReference `json:"message_reference,omitempty"`
 
 	// TODO: Remove this when compatibility is not required.
 	File *File `json:"-"`
