@@ -1077,14 +1077,15 @@ type ApplicationCommandOptionChoice struct {
 }
 
 type Interaction struct {
-	ID        string                            `json:"id"`
-	Type      InteractionType                   `json:"type"`
-	Data      ApplicationCommandInteractionData `json:"data"`
-	GuildID   string                            `json:"guild_id"`
-	ChannelID string                            `json:"channel_id"`
-	Member    Member                            `json:"member"`
-	Token     string                            `json:"token"`
-	Version   int                               `json:"version"`
+	ID        string                             `json:"id"`
+	Type      InteractionType                    `json:"type"`
+	Data      *ApplicationCommandInteractionData `json:"data"`
+	GuildID   string                             `json:"guild_id"`
+	ChannelID string                             `json:"channel_id"`
+	Member    *Member                            `json:"member"`
+	User      *User                              `json:"user"`
+	Token     string                             `json:"token"`
+	Version   int                                `json:"version"`
 }
 
 type InteractionType int
@@ -1114,11 +1115,9 @@ type InteractionResponse struct {
 type InteractionResponseType int
 
 const (
-	InteractionResponseTypePong InteractionResponseType = iota + 1
-	InteractionResponseTypeAcknowledge
-	InteractionResponseTypeChannelMessage
-	InteractionResponseTypeChannelMessageWithSource
-	InteractionResponseTypeAcknowledgeWithSource
+	InteractionResponseTypePong InteractionResponseType     = 1
+	InteractionResponseTypeChannelMessageWithSource         = 4
+	InteractionResponseTypeDeferredChannelMessageWithSource = 5
 )
 
 type InteractionApplicationCommandCallbackData struct {
@@ -1126,7 +1125,7 @@ type InteractionApplicationCommandCallbackData struct {
 	Content         string          `json:"content"`
 	Embeds          *[]MessageEmbed `json:"embeds,omitempty"`
 	AllowedMentions *AllowMention   `json:"allowed_mentions,omitempty"` // TODO: Fix AllowMention in the fork
-	Flags		int		`json:"flags,omitempty"`
+	Flags           int             `json:"flags,omitempty"`
 }
 
 const (
