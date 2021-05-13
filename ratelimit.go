@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	GlobalRateLimit = 50
+	GlobalRateLimit = 49
 	GlobalRateLimitMutex = sync.Mutex{}
 	GlobalLimit = false
 )
@@ -22,7 +22,7 @@ func StartGlobalLimit() {
 	go func (){
 		for {
 			GlobalRateLimitMutex.Lock()
-			GlobalRateLimit = 50
+			GlobalRateLimit = 49
 			GlobalRateLimitMutex.Unlock()
 			time.Sleep(time.Second)
 		}
