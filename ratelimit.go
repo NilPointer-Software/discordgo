@@ -10,6 +10,25 @@ import (
 	"time"
 )
 
+var (
+	GlobalRateLimit = 50
+	GlobalRateLimitMutex = sync.Mutex{}
+	GlobalLimit = false
+)
+
+// Start a program wide rate limit
+func StartGlobalLimit() {
+	GlobalLimit = true
+	go func (){
+		for {
+			GlobalRateLimitMutex.Lock()
+			GlobalRateLimit = 50
+			GlobalRateLimitMutex.Unlock()
+			time.Sleep(time.Second)
+		}
+	}()
+}
+
 // customRateLimit holds information for defining a custom rate limit
 type customRateLimit struct {
 	suffix   string

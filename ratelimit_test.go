@@ -7,6 +7,23 @@ import (
 	"time"
 )
 
+func TestGlobalRateLimit(t *testing.T) {
+	StartGlobalLimit()
+	b1, _ := New("")
+	b2, _ := New("")
+
+	_, _ = b1.User("633751371404804107")
+	_, _ = b2.User("485853402560200704")
+	if GlobalRateLimit == 50 {
+		t.Fatal("Global Rate Limit did not decrease!")
+	}
+
+	time.Sleep(time.Second)
+	if GlobalRateLimit != 50 {
+		t.Fatal("Global Rate Limit did not refresh!")
+	}
+}
+
 // This test takes ~2 seconds to run
 func TestRatelimitReset(t *testing.T) {
 	rl := NewRatelimiter()

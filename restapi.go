@@ -63,6 +63,17 @@ func (s *Session) RequestWithBucketID(method, urlStr string, data interface{}, b
 // Sequence is the sequence number, if it fails with a 502 it will
 // retry with sequence+1 until it either succeeds or sequence >= session.MaxRestRetries
 func (s *Session) request(method, urlStr, contentType string, b []byte, bucketID string, sequence int) (response []byte, err error) {
+	if GlobalLimit {
+		if GlobalRateLimit == 0 {
+			log.Println("Global Rate Limit depleted! ("+s.Token[:10]+")") // Note: Temp
+		}
+		GlobalRateLimitMutex.Lock()
+		for GlobalRateLimit == 0 {
+			time.Sleep(time.Millisecond) // Wait for refresh
+		}
+		GlobalRateLimit -= 1
+		GlobalRateLimitMutex.Unlock()
+	}
 	if bucketID == "" {
 		bucketID = strings.SplitN(urlStr, "?", 2)[0]
 	}
