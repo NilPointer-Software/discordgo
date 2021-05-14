@@ -14,12 +14,12 @@ func TestGlobalRateLimit(t *testing.T) {
 
 	_, _ = b1.User("633751371404804107")
 	_, _ = b2.User("485853402560200704")
-	if GlobalRateLimit == 49 {
+	if GlobalRateLimit == 48 {
 		t.Fatal("Global Rate Limit did not decrease!")
 	}
 
 	time.Sleep(time.Second)
-	if GlobalRateLimit != 49 {
+	if GlobalRateLimit != 48 {
 		t.Fatal("Global Rate Limit did not refresh!")
 	}
 }

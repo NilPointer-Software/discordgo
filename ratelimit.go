@@ -11,18 +11,18 @@ import (
 )
 
 var (
-	GlobalRateLimit = 49
-	GlobalRateLimitMutex = sync.Mutex{}
-	GlobalLimit = false
+	GlobalRateLimit      = 48
+	GlobalRateLimitMutex = sync.RWMutex{}
+	GlobalLimit          = false
 )
 
 // Start a program wide rate limit
 func StartGlobalLimit() {
 	GlobalLimit = true
-	go func (){
+	go func() {
 		for {
 			GlobalRateLimitMutex.Lock()
-			GlobalRateLimit = 49
+			GlobalRateLimit = 48
 			GlobalRateLimitMutex.Unlock()
 			time.Sleep(time.Second)
 		}

@@ -27,6 +27,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -40,6 +41,24 @@ var (
 	ErrGuildNoSplash           = errors.New("guild does not have a splash set")
 	ErrUnauthorized            = errors.New("HTTP request was unauthorized. This could be because the provided token was not a bot token. Please add \"Bot \" to the start of your token. https://discordapp.com/developers/docs/reference#authentication-example-bot-token-authorization-header")
 )
+
+var (
+	TotalRequestsSent      = make(map[string]int)
+	TotalRequestsSentMutex = sync.Mutex{}
+)
+
+func incrementRequestsSent(token string) {
+	TotalRequestsSentMutex.Lock()
+	defer TotalRequestsSentMutex.Unlock()
+
+	total, ok := TotalRequestsSent[token]
+	if !ok {
+		TotalRequestsSent[token] = 1
+		return
+	}
+
+	TotalRequestsSent[token] = total + 1
+}
 
 // Request is the same as RequestWithBucketID but the bucket id is the same as the urlStr
 func (s *Session) Request(method, urlStr string, data interface{}) (response []byte, err error) {
@@ -63,14 +82,21 @@ func (s *Session) RequestWithBucketID(method, urlStr string, data interface{}, b
 // Sequence is the sequence number, if it fails with a 502 it will
 // retry with sequence+1 until it either succeeds or sequence >= session.MaxRestRetries
 func (s *Session) request(method, urlStr, contentType string, b []byte, bucketID string, sequence int) (response []byte, err error) {
+	go incrementRequestsSent(s.Token)
 	if GlobalLimit {
 		if GlobalRateLimit == 0 {
-			log.Println("Global Rate Limit depleted! ("+s.Token[:10]+")") // Note: Temp
+			log.Println("Global Rate Limit depleted! (" + s.Token + ")") // Note: Temp
 		}
-		GlobalRateLimitMutex.Lock()
-		for GlobalRateLimit == 0 {
+		for {
+			GlobalRateLimitMutex.RLock()
+			if GlobalRateLimit != 0 {
+				GlobalRateLimitMutex.RUnlock()
+				break
+			}
+			GlobalRateLimitMutex.RUnlock()
 			time.Sleep(time.Millisecond) // Wait for refresh
 		}
+		GlobalRateLimitMutex.Lock()
 		GlobalRateLimit -= 1
 		GlobalRateLimitMutex.Unlock()
 	}
