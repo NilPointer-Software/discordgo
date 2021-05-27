@@ -1111,13 +1111,13 @@ const (
 
 type Component struct {
 	Type       ComponentType `json:"type"`
-	Style      *Style        `json:"style"`
-	Label      *string       `json:"label"`
-	Emoji      *Emoji        `json:"emoji"`
-	CustomID   *string       `json:"custom_id"`
-	URL        *string       `json:"url"`
-	Disabled   bool          `json:"disabled"`
-	Components *[]Component  `json:"components"`
+	Style      *Style        `json:"style,omitempty"`
+	Label      *string       `json:"label,omitempty"`
+	Emoji      *Emoji        `json:"emoji,omitempty"`
+	CustomID   *string       `json:"custom_id,omitempty"`
+	URL        *string       `json:"url,omitempty"`
+	Disabled   *bool         `json:"disabled,omitempty"`
+	Components *[]Component  `json:"components,omitempty"`
 }
 
 type ComponentType int
