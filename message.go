@@ -161,7 +161,8 @@ type MessageSend struct {
 	AllowedMentions  *AllowMention     `json:"allowed_mentions,omitempty"`
 	Files            []*File           `json:"-"` // TODO: ? File???
 	MessageReference *MessageReference `json:"message_reference,omitempty"`
-
+	Components       []Component       `json:"components,omitempty"`
+	
 	// TODO: Remove this when compatibility is not required.
 	File *File `json:"-"`
 }
