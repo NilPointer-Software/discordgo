@@ -170,9 +170,10 @@ type MessageSend struct {
 // MessageEdit is used to chain parameters via ChannelMessageEditComplex, which
 // is also where you should get the instance from.
 type MessageEdit struct {
-	Content *string       `json:"content,omitempty"`
-	Embed   *MessageEmbed `json:"embed,omitempty"`
-	Flags   int           `json:"flags,omitempty"`
+	Content    *string       `json:"content,omitempty"`
+	Embed      *MessageEmbed `json:"embed,omitempty"`
+	Flags      int           `json:"flags,omitempty"`
+	Components []Component   `json:"components,omitempty"`
 
 	ID      string `json:"-"`
 	Channel string `json:"-"`
