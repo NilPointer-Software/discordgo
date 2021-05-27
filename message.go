@@ -35,6 +35,13 @@ const (
 	MessageTypeChannelFollowAdd
 	MessageTypeGuildDiscoveryDisqualified = 14
 	MessageTypeGuildDiscoveryRequalified  = 15
+	MessageTypeGuildDiscoveryGracePeriodInitialWarning = 16
+	MessageTypeGuildDiscoveryGracePeriodFinalWarning = 17
+	MessageTypeThreadCreated = 18
+	MessageTypeReply = 19
+	MessageTypeApplicationCommand = 20
+	MessageTypeThreadStarterMessage = 21
+	MessageTypeGuildInviteReminder = 22
 )
 
 // A Message stores all data related to a specific Discord message.
@@ -122,6 +129,20 @@ type Message struct {
 	// This is a combination of bit masks; the presence of a certain permission can
 	// be checked by performing a bitwise AND between this int and the flag.
 	Flags int `json:"flags"`
+
+	// Stickers sent with the message
+	Stickers *[]Sticker `json:"stickers"`
+
+	// The message associated with the message_reference
+	ReferencedMessage *Message `json:"referenced_message"`
+
+	// Interaction information if the message was sent by an interaction response
+	Interaction *InteractionMessage `json:"interaction"`
+
+	Thread *Channel `json:"thread"`
+
+	// Message components
+	Components *[]Component `json:"components"`
 }
 
 // File stores info about files you e.g. send in messages.
@@ -138,7 +159,7 @@ type MessageSend struct {
 	Embed            *MessageEmbed     `json:"embed,omitempty"`
 	PayloadJSON      string            `json:"payload_json"`
 	AllowedMentions  *AllowMention     `json:"allowed_mentions,omitempty"`
-	Files            []*File       	   `json:"-"` // TODO: ? File???
+	Files            []*File           `json:"-"` // TODO: ? File???
 	MessageReference *MessageReference `json:"message_reference,omitempty"`
 
 	// TODO: Remove this when compatibility is not required.

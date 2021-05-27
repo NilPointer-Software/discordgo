@@ -580,6 +580,13 @@ func (s *Session) onEvent(messageType int, message []byte) (*Event, error) {
 	// Store the message sequence
 	atomic.StoreInt64(s.sequence, e.Sequence)
 
+	if e.Type == reconnectEventType {
+		s.log(LogInformational, "Closing and reconnecting in response to RECONNECT event")
+		s.Close()
+		s.reconnect()
+		return e, nil
+	}
+
 	// Map event to registered event handlers and pass it along to any registered handlers.
 	if eh, ok := registeredInterfaceProviders[e.Type]; ok {
 		e.Struct = eh.New()

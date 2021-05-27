@@ -2200,10 +2200,20 @@ func (s *Session) WebhookDeleteWithToken(webhookID, token string) (st *Webhook, 
 // webhookID: The ID of a webhook.
 // token    : The auth token for the webhook
 // wait     : Waits for server confirmation of message send and ensures that the return struct is populated (it is nil otherwise)
-func (s *Session) WebhookExecute(webhookID, token string, wait bool, data *WebhookParams) (st *Message, err error) {
+func (s *Session) WebhookExecute(webhookID, token string, wait bool, thread_id string, data *WebhookParams) (st *Message, err error) {
 	uri := EndpointWebhookToken(webhookID, token)
-	if wait {
-		uri += "?wait=true"
+	if wait || thread_id != "" {
+		uri += "?"
+		if wait {
+			uri += "wait=true"
+		}
+		if thread_id != "" {
+			if uri[len(uri)-1] == '?' {
+				uri += "thread_id="+thread_id
+			} else {
+				uri += "&thread_id="+thread_id
+			}
+		}
 	}
 
 	response, err := s.RequestWithBucketID("POST", uri, data, EndpointWebhookToken("", ""))

@@ -276,10 +276,35 @@ type Channel struct {
 	// Empty if the channel has no pinned messages.
 	LastPinTimestamp *Timestamp `json:"last_pin_timestamp"`
 
+	// Voice region id for the voice channel, automatic when set to null
+	RTCRegion *string `json:"rtc_region"`
+
+	// The camera video quality mode of the voice channel, 1 when not present
+	VideoQualityMode *int `json:"video_quality_mode"`
+
+	// An approximate count of messages in a thread, stops counting at 50
+	MessageCount *int `json:"message_count"`
+
+	// An approximate count of users in a thread, stops counting at 50
+	MemberCount *int `json:"member_count"`
+
+	// Thread-specific fields not needed by other channels
+	ThreadMetadata *ThreadMetadata `json:"thread_metadata"`
+
+	// Thread member object for the current user, if they have joined the thread, only included on certain API endpoints
+	Member *ThreadMember `json:"member"`
+
 	// Non-Discord property
 	// The messages in the channel. This is only present in state-cached channels,
 	// and State.MaxMessageCount must be non-zero.
 	Messages []*Message `json:"-"`
+}
+
+type PartialChannel struct {
+	ID                   string                 `json:"id"`
+	Name                 string                 `json:"name"`
+	Type                 ChannelType            `json:"type"`
+	PermissionOverwrites []*PermissionOverwrite `json:"permission_overwrites"`
 }
 
 // Mention returns a string which mentions the channel
@@ -299,6 +324,21 @@ type ChannelEdit struct {
 	UserLimit            int                    `json:"user_limit,omitempty"`
 	PermissionOverwrites []*PermissionOverwrite `json:"permission_overwrites,omitempty"`
 	ParentID             string                 `json:"parent_id,omitempty"`
+}
+
+type ThreadMetadata struct {
+	Archived            bool      `json:"archived"`
+	ArchiverID          *string   `json:"archiver_id"`
+	AutoArchiveDuration int       `json:"auto_archive_duration"`
+	ArchiveTimestamp    Timestamp `json:"archive_timestamp"`
+	Locked              bool      `json:"locked"`
+}
+
+type ThreadMember struct {
+	ID            string    `json:"id"`
+	UserID        string    `json:"user_id"`
+	JoinTimestamp Timestamp `json:"join_timestamp"`
+	Flags         int       `json:"flags"`
 }
 
 // FollowChannel structure holds information from ChannelFollow function
@@ -324,14 +364,14 @@ const (
 
 // Emoji struct holds data related to Emoji's
 type Emoji struct {
-	ID            string   `json:"id"`
-	Name          string   `json:"name"`
-	Roles         []string `json:"roles"`
-	User          *User    `json:"user"`
-	RequireColons bool     `json:"require_colons"`
-	Managed       bool     `json:"managed"`
-	Animated      bool     `json:"animated"`
-	Available     bool     `json:"available"`
+	ID            string    `json:"id"`
+	Name          string    `json:"name"`
+	Roles         *[]string `json:"roles"`
+	User          *User     `json:"user"`
+	RequireColons bool      `json:"require_colons"`
+	Managed       bool      `json:"managed"`
+	Animated      bool      `json:"animated"`
+	Available     bool      `json:"available"`
 }
 
 // MessageFormat returns a correctly formatted Emoji for use in Message content and embeds
@@ -1051,19 +1091,65 @@ type SessionStartLimit struct {
 	ResetAfter int64 `json:"reset_after"`
 }
 
+type Sticker struct {
+	ID          string            `json:"id"`
+	PackID      string            `json:"pack_id"`
+	Name        string            `json:"name"`
+	Description string            `json:"description"`
+	Tags        *string           `json:"tags"`
+	Asset       string            `json:"asset"`
+	FormatType  StickerFormatType `json:"format_type"`
+}
+
+type StickerFormatType int
+
+const (
+	StickerFormatTypePNG    StickerFormatType = 1
+	StickerFormatTypeAPNG                     = 2
+	StickerFormatTypeLOTTIE                   = 3
+)
+
+type Component struct {
+	Type       ComponentType `json:"type"`
+	Style      *Style        `json:"style"`
+	Label      *string       `json:"label"`
+	Emoji      *Emoji        `json:"emoji"`
+	CustomID   *string       `json:"custom_id"`
+	URL        *string       `json:"url"`
+	Disabled   bool          `json:"disabled"`
+	Components *[]Component  `json:"components"`
+}
+
+type ComponentType int
+
+const (
+	ComponentTypeActionRow ComponentType = 1
+	ComponentTypeButton                  = 2
+)
+
+type Style int
+
+const (
+	StylePrimary   Style = 1
+	StyleSecondary       = 2
+	StyleSuccess         = 3
+	StyleDanger          = 4
+	StyleLink            = 5
+)
+
 type ApplicationCommand struct {
-	ID            string                      `json:"id,omitempty"`
-	ApplicationID string                      `json:"application_id,omitempty"`
-	Name          string                      `json:"name"`
-	Description   string                      `json:"description"`
-	Options       *[]ApplicationCommandOption `json:"options,omitempty"`
+	ID                string                      `json:"id,omitempty"`
+	ApplicationID     string                      `json:"application_id,omitempty"`
+	Name              string                      `json:"name"`
+	Description       string                      `json:"description"`
+	Options           *[]ApplicationCommandOption `json:"options,omitempty"`
+	DefaultPermission *bool                       `json:"default_permission"` // Default TRUE
 }
 
 type ApplicationCommandOption struct {
 	Type        ApplicationCommandOptionType      `json:"type"`
 	Name        string                            `json:"name"`
 	Description string                            `json:"description"`
-	Default     bool                              `json:"default,omitempty"`
 	Required    bool                              `json:"required,omitempty"`
 	Choices     *[]ApplicationCommandOptionChoice `json:"choices,omitempty"`
 	Options     *[]ApplicationCommandOption       `json:"options,omitempty"`
@@ -1071,21 +1157,55 @@ type ApplicationCommandOption struct {
 
 type ApplicationCommandOptionType int
 
+const (
+	OptionTypeSubCommand ApplicationCommandOptionType = iota + 1
+	OptionTypeSubCommandGroup
+	OptionTypeString
+	OptionTypeInteger
+	OptionTypeBoolean
+	OptionTypeUser
+	OptionTypeChannel
+	OptionTypeRole
+	OptionTypeMentionable
+)
+
 type ApplicationCommandOptionChoice struct {
 	Name  string      `json:"name"`
 	Value interface{} `json:"value,omitempty"`
 }
 
+type GuildApplicationCommandPermissions struct {
+	ID            string                          `json:"id"`
+	ApplicationID string                          `json:"application_id"`
+	GuildID       string                          `json:"guild_id"`
+	Permissions   []ApplicationCommandPermissions `json:"permissions"`
+}
+
+type ApplicationCommandPermissions struct {
+	ID         string                           `json:"id"`
+	Type       ApplicationCommandPermissionType `json:"type"`
+	Permission bool                             `json:"permission"`
+}
+
+type ApplicationCommandPermissionType int
+
+const (
+	ApplicationCommandPermissionTypeRole = 1
+	ApplicationCommandPermissionTypeUser = 2
+)
+
 type Interaction struct {
-	ID        string                             `json:"id"`
-	Type      InteractionType                    `json:"type"`
-	Data      *ApplicationCommandInteractionData `json:"data"`
-	GuildID   string                             `json:"guild_id"`
-	ChannelID string                             `json:"channel_id"`
-	Member    *Member                            `json:"member"`
-	User      *User                              `json:"user"`
-	Token     string                             `json:"token"`
-	Version   int                                `json:"version"`
+	ID            string                             `json:"id"`
+	ApplicationID string                             `json:"application_id"`
+	Type          InteractionType                    `json:"type"`
+	Data          *ApplicationCommandInteractionData `json:"data"`
+	GuildID       *string                            `json:"guild_id"`
+	ChannelID     *string                            `json:"channel_id"`
+	Member        *Member                            `json:"member"`
+	User          *User                              `json:"user"`
+	Token         string                             `json:"token"`
+	Version       int                                `json:"version"`
+	Message       *Message                           `json:"message"`
 }
 
 type InteractionType int
@@ -1093,16 +1213,28 @@ type InteractionType int
 const (
 	InteractionTypePing InteractionType = iota + 1
 	InteractionTypeApplicationCommand
+	InteractionTypeMessageComponent
 )
 
 type ApplicationCommandInteractionData struct {
-	ID      string                                     `json:"id"`
-	Name    string                                     `json:"name"`
-	Options *[]ApplicationCommandInteractionDataOption `json:"options"`
+	ID            string                                     `json:"id"`
+	Name          string                                     `json:"name"`
+	Resolved      *ApplicationCommandInteractionDataResolved `json:"resolved"`
+	Options       *[]ApplicationCommandInteractionDataOption `json:"options"`
+	CustomID      string                                     `json:"custom_id"`
+	ComponentType ComponentType                              `json:"component_type"`
+}
+
+type ApplicationCommandInteractionDataResolved struct {
+	Users    *map[string]User           `json:"users"`
+	Members  *map[string]Member         `json:"members"`
+	Roles    *map[string]Role           `json:"roles"`
+	Channels *map[string]PartialChannel `json:"channels"`
 }
 
 type ApplicationCommandInteractionDataOption struct {
 	Name    string                                     `json:"name"`
+	Type    ApplicationCommandOptionType               `json:"type"`
 	Value   interface{}                                `json:"value"` // =/ Oh god, this will be VERY FUNNY to handle ~MBSA
 	Options *[]ApplicationCommandInteractionDataOption `json:"options"`
 }
@@ -1115,9 +1247,11 @@ type InteractionResponse struct {
 type InteractionResponseType int
 
 const (
-	InteractionResponseTypePong InteractionResponseType     = 1
-	InteractionResponseTypeChannelMessageWithSource         = 4
-	InteractionResponseTypeDeferredChannelMessageWithSource = 5
+	InteractionResponseTypePong                             InteractionResponseType = 1
+	InteractionResponseTypeChannelMessageWithSource                                 = 4
+	InteractionResponseTypeDeferredChannelMessageWithSource                         = 5
+	InteractionResponseTypeDeferredUpdateMessage                                    = 6
+	InteractionResponseTypeUpdateMessage                                            = 7
 )
 
 type InteractionApplicationCommandCallbackData struct {
@@ -1126,18 +1260,15 @@ type InteractionApplicationCommandCallbackData struct {
 	Embeds          *[]MessageEmbed `json:"embeds,omitempty"`
 	AllowedMentions *AllowMention   `json:"allowed_mentions,omitempty"` // TODO: Fix AllowMention in the fork
 	Flags           int             `json:"flags,omitempty"`
+	Components      *[]Component    `json:"components,omitempty"` // I think this should be here ~MBSA
 }
 
-const (
-	OptionTypeSubCommand ApplicationCommandOptionType = iota + 1
-	OptionTypeSubCommandGroup
-	OptionTypeString
-	OptionTypeInteger
-	OptionTypeBoolean
-	OptionTypeUser
-	OptionTypeChannel
-	OptionTypeRole
-)
+type InteractionMessage struct {
+	ID   string          `json:"id"`
+	Type InteractionType `json:"type"`
+	Name string          `json:"name"`
+	User User            `json:"user"`
+}
 
 // Constants for the different bit offsets of text channel permissions
 const (

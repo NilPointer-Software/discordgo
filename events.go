@@ -294,3 +294,65 @@ type InviteDelete struct {
 	GuildID   string `json:"guild_id"`
 	Code      string `json:"code"`
 }
+
+type ApplicationCommandCreate struct {
+	*ApplicationCommand
+	GuildID *string `json:"guild_id"`
+}
+
+type ApplicationCommandUpdate struct {
+	*ApplicationCommandCreate
+}
+
+type ApplicationCommandDelete struct {
+	*ApplicationCommandCreate
+}
+
+type IntegrationCreate struct {
+	*Integration
+	GuildID string `json:"guild_id"`
+}
+
+type IntegrationUpdate struct {
+	*IntegrationCreate
+}
+
+type IntegrationDelete struct {
+	*IntegrationCreate
+	ID            string  `json:"id"`
+	ApplicationID *string `json:"application_id"`
+}
+
+type ThreadCreate struct {
+	*Channel
+}
+
+type ThreadUpdate struct {
+	*Channel
+}
+
+type ThreadDelete struct {
+	ID       string      `json:"id"`
+	GuildID  string      `json:"guild_id"`
+	ParentID string      `json:"parent_id"`
+	Type     ChannelType `json:"type"`
+}
+
+type ThreadListSync struct {
+	GuildID    string         `json:"guild_id"`
+	ChannelIDs *[]string      `json:"channel_ids"`
+	Threads    []Channel      `json:"threads"`
+	Members    []ThreadMember `json:"members"`
+}
+
+type ThreadMemberUpdate struct {
+	*ThreadMember
+}
+
+type ThreadMembersUpdate struct {
+	ID       string      `json:"id"`
+	GuildID  string      `json:"guild_id"`
+	MemberCount int `json:"member_count"`
+	AddedMembers *[]ThreadMember `json:"added_members"`
+	RemovedMemberIDs *[]string `json:"removed_member_ids"`
+}

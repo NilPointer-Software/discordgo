@@ -7,13 +7,23 @@ package discordgo
 // Event type values are used to match the events returned by Discord.
 // EventTypes surrounded by __ are synthetic and are internal to DiscordGo.
 const (
+	applicationCommandCreateEventType   = "APPLICATION_COMMAND_CREATE"
+	applicationCommandUpdateEventType   = "APPLICATION_COMMAND_UPDATE"
+	applicationCommandDeleteEventType   = "APPLICATION_COMMAND_DELETE"
 	channelCreateEventType              = "CHANNEL_CREATE"
 	channelDeleteEventType              = "CHANNEL_DELETE"
 	channelPinsUpdateEventType          = "CHANNEL_PINS_UPDATE"
 	channelUpdateEventType              = "CHANNEL_UPDATE"
+	threadCreateEventType               = "THREAD_CREATE"
+	threadUpdateEventType               = "THREAD_UPDATE"
+	threadDeleteEventType               = "THREAD_DELETE"
+	threadListSyncEventType             = "THREAD_LIST_SYNC"
+	threadMemberUpdateEventType         = "THREAD_MEMBER_UPDATE"
+	threadMembersUpdateEventType        = "THREAD_MEMBERS_UPDATE"
 	connectEventType                    = "__CONNECT__"
 	disconnectEventType                 = "__DISCONNECT__"
 	eventEventType                      = "__EVENT__"
+	reconnectEventType                  = "RECONNECT"
 	guildBanAddEventType                = "GUILD_BAN_ADD"
 	guildBanRemoveEventType             = "GUILD_BAN_REMOVE"
 	guildCreateEventType                = "GUILD_CREATE"
@@ -55,6 +65,9 @@ const (
 	inviteCreateEventType               = "INVITE_CREATE"
 	inviteDeleteEventType               = "INVITE_DELETE"
 	interactionCreateEventType          = "INTERACTION_CREATE"
+	integrationCreateEventType          = "INTEGRATION_CREATE"
+	integrationUpdateEventType          = "INTEGRATION_UPDATE"
+	integrationDeleteEventType          = "INTEGRATION_DELETE"
 )
 
 // channelCreateEventHandler is an event handler for ChannelCreate events.
@@ -997,6 +1010,246 @@ func (eh interactionCreateEventHandler) Handle(s *Session, i interface{}) {
 	}
 }
 
+// applicationCommandCreateEventHandler is an event handler for ApplicationCommandCreate events.
+type applicationCommandCreateEventHandler func(*Session, *ApplicationCommandCreate)
+
+// Type returns the event type for ApplicationCommandCreate events.
+func (eh applicationCommandCreateEventHandler) Type() string {
+	return applicationCommandCreateEventType
+}
+
+// New returns a new instance of ApplicationCommandCreate.
+func (eh applicationCommandCreateEventHandler) New() interface{} {
+	return &ApplicationCommandCreate{}
+}
+
+// Handle is the handler for ApplicationCommandCreate events.
+func (eh applicationCommandCreateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ApplicationCommandCreate); ok {
+		eh(s, t)
+	}
+}
+
+// applicationCommandUpdateEventHandler is an event handler for ApplicationCommandUpdate events.
+type applicationCommandUpdateEventHandler func(*Session, *ApplicationCommandUpdate)
+
+// Type returns the event type for ApplicationCommandUpdate events.
+func (eh applicationCommandUpdateEventHandler) Type() string {
+	return applicationCommandUpdateEventType
+}
+
+// New returns a new instance of ApplicationCommandUpdate.
+func (eh applicationCommandUpdateEventHandler) New() interface{} {
+	return &ApplicationCommandUpdate{}
+}
+
+// Handle is the handler for ApplicationCommandUpdate events.
+func (eh applicationCommandUpdateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ApplicationCommandUpdate); ok {
+		eh(s, t)
+	}
+}
+
+// applicationCommandCreateEventHandler is an event handler for ApplicationCommandDelete events.
+type applicationCommandDeleteEventHandler func(*Session, *ApplicationCommandDelete)
+
+// Type returns the event type for ApplicationCommandDelete events.
+func (eh applicationCommandDeleteEventHandler) Type() string {
+	return applicationCommandDeleteEventType
+}
+
+// New returns a new instance of ApplicationCommandDelete.
+func (eh applicationCommandDeleteEventHandler) New() interface{} {
+	return &ApplicationCommandDelete{}
+}
+
+// Handle is the handler for ApplicationCommandDelete events.
+func (eh applicationCommandDeleteEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ApplicationCommandDelete); ok {
+		eh(s, t)
+	}
+}
+
+// integrationCreateEventHandler is an event handler for IntegrationCreate events.
+type integrationCreateEventHandler func(*Session, *IntegrationCreate)
+
+// Type returns the event type for IntegrationCreate events.
+func (eh integrationCreateEventHandler) Type() string {
+	return integrationCreateEventType
+}
+
+// New returns a new instance of IntegrationCreate.
+func (eh integrationCreateEventHandler) New() interface{} {
+	return &IntegrationCreate{}
+}
+
+// Handle is the handler for IntegrationCreate events.
+func (eh integrationCreateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*IntegrationCreate); ok {
+		eh(s, t)
+	}
+}
+
+// integrationUpdateEventHandler is an event handler for IntegrationUpdate events.
+type integrationUpdateEventHandler func(*Session, *IntegrationUpdate)
+
+// Type returns the event type for IntegrationUpdate events.
+func (eh integrationUpdateEventHandler) Type() string {
+	return integrationUpdateEventType
+}
+
+// New returns a new instance of IntegrationUpdate.
+func (eh integrationUpdateEventHandler) New() interface{} {
+	return &IntegrationUpdate{}
+}
+
+// Handle is the handler for IntegrationUpdate events.
+func (eh integrationUpdateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*IntegrationUpdate); ok {
+		eh(s, t)
+	}
+}
+
+// integrationDeleteEventHandler is an event handler for IntegrationDelete events.
+type integrationDeleteEventHandler func(*Session, *IntegrationDelete)
+
+// Type returns the event type for IntegrationDelete events.
+func (eh integrationDeleteEventHandler) Type() string {
+	return integrationDeleteEventType
+}
+
+// New returns a new instance of IntegrationDelete.
+func (eh integrationDeleteEventHandler) New() interface{} {
+	return &IntegrationDelete{}
+}
+
+// Handle is the handler for IntegrationDelete events.
+func (eh integrationDeleteEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*IntegrationDelete); ok {
+		eh(s, t)
+	}
+}
+
+// threadCreateEventHandler is an event handler for ThreadCreate events.
+type threadCreateEventHandler func(*Session, *ThreadCreate)
+
+// Type returns the event type for ThreadCreate events.
+func (eh threadCreateEventHandler) Type() string {
+	return threadCreateEventType
+}
+
+// New returns a new instance of ThreadCreate.
+func (eh threadCreateEventHandler) New() interface{} {
+	return &ThreadCreate{}
+}
+
+// Handle is the handler for ThreadCreate events.
+func (eh threadCreateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ThreadCreate); ok {
+		eh(s, t)
+	}
+}
+
+// threadUpdateEventHandler is an event handler for ThreadUpdate events.
+type threadUpdateEventHandler func(*Session, *ThreadUpdate)
+
+// Type returns the event type for ThreadUpdate events.
+func (eh threadUpdateEventHandler) Type() string {
+	return threadUpdateEventType
+}
+
+// New returns a new instance of ThreadUpdate.
+func (eh threadUpdateEventHandler) New() interface{} {
+	return &ThreadUpdate{}
+}
+
+// Handle is the handler for ThreadUpdate events.
+func (eh threadUpdateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ThreadUpdate); ok {
+		eh(s, t)
+	}
+}
+
+// threadDeleteEventHandler is an event handler for ThreadDelete events.
+type threadDeleteEventHandler func(*Session, *ThreadDelete)
+
+// Type returns the event type for ThreadDelete events.
+func (eh threadDeleteEventHandler) Type() string {
+	return threadDeleteEventType
+}
+
+// New returns a new instance of ThreadDelete.
+func (eh threadDeleteEventHandler) New() interface{} {
+	return &ThreadDelete{}
+}
+
+// Handle is the handler for ThreadDelete events.
+func (eh threadDeleteEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ThreadDelete); ok {
+		eh(s, t)
+	}
+}
+
+// threadListSyncEventHandler is an event handler for ThreadListSync events.
+type threadListSyncEventHandler func(*Session, *ThreadListSync)
+
+// Type returns the event type for ThreadListSync events.
+func (eh threadListSyncEventHandler) Type() string {
+	return threadListSyncEventType
+}
+
+// New returns a new instance of ThreadListSync.
+func (eh threadListSyncEventHandler) New() interface{} {
+	return &ThreadListSync{}
+}
+
+// Handle is the handler for ThreadListSync events.
+func (eh threadListSyncEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ThreadListSync); ok {
+		eh(s, t)
+	}
+}
+
+// threadMemberUpdateEventHandler is an event handler for ThreadMemberUpdate events.
+type threadMemberUpdateEventHandler func(*Session, *ThreadMemberUpdate)
+
+// Type returns the event type for ThreadMemberUpdate events.
+func (eh threadMemberUpdateEventHandler) Type() string {
+	return threadMemberUpdateEventType
+}
+
+// New returns a new instance of ThreadMemberUpdate.
+func (eh threadMemberUpdateEventHandler) New() interface{} {
+	return &ThreadMemberUpdate{}
+}
+
+// Handle is the handler for ThreadMemberUpdate events.
+func (eh threadMemberUpdateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ThreadMemberUpdate); ok {
+		eh(s, t)
+	}
+}
+
+// threadMembersUpdateEventHandler is an event handler for ThreadMembersUpdate events.
+type threadMembersUpdateEventHandler func(*Session, *ThreadMembersUpdate)
+
+// Type returns the event type for ThreadMembersUpdate events.
+func (eh threadMembersUpdateEventHandler) Type() string {
+	return threadMembersUpdateEventType
+}
+
+// New returns a new instance of ThreadMembersUpdate.
+func (eh threadMembersUpdateEventHandler) New() interface{} {
+	return &ThreadDelete{}
+}
+
+// Handle is the handler for ThreadMembersUpdate events.
+func (eh threadMembersUpdateEventHandler) Handle(s *Session, i interface{}) {
+	if t, ok := i.(*ThreadMembersUpdate); ok {
+		eh(s, t)
+	}
+}
+
 func handlerForInterface(handler interface{}) EventHandler {
 	switch v := handler.(type) {
 	case func(*Session, interface{}):
@@ -1097,6 +1350,30 @@ func handlerForInterface(handler interface{}) EventHandler {
 		return inviteDeleteEventHandler(v)
 	case func(*Session, *Interaction):
 		return interactionCreateEventHandler(v)
+	case func(*Session, *ApplicationCommandCreate):
+		return applicationCommandCreateEventHandler(v)
+	case func(*Session, *ApplicationCommandUpdate):
+		return applicationCommandUpdateEventHandler(v)
+	case func(*Session, *ApplicationCommandDelete):
+		return applicationCommandDeleteEventHandler(v)
+	case func(*Session, *IntegrationCreate):
+		return integrationCreateEventHandler(v)
+	case func(*Session, *IntegrationUpdate):
+		return integrationUpdateEventHandler(v)
+	case func(*Session, *IntegrationDelete):
+		return integrationDeleteEventHandler(v)
+	case func(*Session, *ThreadCreate):
+		return threadCreateEventHandler(v)
+	case func(*Session, *ThreadUpdate):
+		return threadUpdateEventHandler(v)
+	case func(*Session, *ThreadDelete):
+		return threadDeleteEventHandler(v)
+	case func(*Session, *ThreadListSync):
+		return threadListSyncEventHandler(v)
+	case func(*Session, *ThreadMemberUpdate):
+		return threadMemberUpdateEventHandler(v)
+	case func(*Session, *ThreadMembersUpdate):
+		return threadMembersUpdateEventHandler(v)
 	}
 
 	return nil
@@ -1147,4 +1424,16 @@ func init() {
 	registerInterfaceProvider(inviteCreateEventHandler(nil))
 	registerInterfaceProvider(inviteDeleteEventHandler(nil))
 	registerInterfaceProvider(interactionCreateEventHandler(nil))
+	registerInterfaceProvider(applicationCommandCreateEventHandler(nil))
+	registerInterfaceProvider(applicationCommandUpdateEventHandler(nil))
+	registerInterfaceProvider(applicationCommandDeleteEventHandler(nil))
+	registerInterfaceProvider(integrationCreateEventHandler(nil))
+	registerInterfaceProvider(integrationUpdateEventHandler(nil))
+	registerInterfaceProvider(integrationDeleteEventHandler(nil))
+	registerInterfaceProvider(threadCreateEventHandler(nil))
+	registerInterfaceProvider(threadUpdateEventHandler(nil))
+	registerInterfaceProvider(threadDeleteEventHandler(nil))
+	registerInterfaceProvider(threadListSyncEventHandler(nil))
+	registerInterfaceProvider(threadMemberUpdateEventHandler(nil))
+	registerInterfaceProvider(threadMembersUpdateEventHandler(nil))
 }
