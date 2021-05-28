@@ -1104,37 +1104,37 @@ type Sticker struct {
 type StickerFormatType int
 
 const (
-	StickerFormatTypePNG    StickerFormatType = 1
-	StickerFormatTypeAPNG                     = 2
-	StickerFormatTypeLOTTIE                   = 3
+	StickerFormatTypePNG StickerFormatType = iota + 1
+	StickerFormatTypeAPNG
+	StickerFormatTypeLOTTIE
 )
 
 type Component struct {
 	Type       ComponentType `json:"type"`
-	Style      *Style        `json:"style,omitempty"`
-	Label      *string       `json:"label,omitempty"`
+	Style      Style         `json:"style,omitempty"`
+	Label      string        `json:"label,omitempty"`
 	Emoji      *Emoji        `json:"emoji,omitempty"`
-	CustomID   *string       `json:"custom_id,omitempty"`
-	URL        *string       `json:"url,omitempty"`
-	Disabled   *bool         `json:"disabled,omitempty"`
+	CustomID   string        `json:"custom_id,omitempty"`
+	URL        string        `json:"url,omitempty"`
+	Disabled   bool          `json:"disabled,omitempty"`
 	Components *[]Component  `json:"components,omitempty"`
 }
 
 type ComponentType int
 
 const (
-	ComponentTypeActionRow ComponentType = 1
-	ComponentTypeButton                  = 2
+	ComponentTypeActionRow ComponentType = iota + 1
+	ComponentTypeButton
 )
 
 type Style int
 
 const (
-	StylePrimary   Style = 1
-	StyleSecondary       = 2
-	StyleSuccess         = 3
-	StyleDanger          = 4
-	StyleLink            = 5
+	StylePrimary Style = iota + 1
+	StyleSecondary
+	StyleSuccess
+	StyleDanger
+	StyleLink
 )
 
 type ApplicationCommand struct {
@@ -1190,8 +1190,8 @@ type ApplicationCommandPermissions struct {
 type ApplicationCommandPermissionType int
 
 const (
-	ApplicationCommandPermissionTypeRole = 1
-	ApplicationCommandPermissionTypeUser = 2
+	ApplicationCommandPermissionTypeRole ApplicationCommandPermissionType = 1
+	ApplicationCommandPermissionTypeUser ApplicationCommandPermissionType = 2
 )
 
 type Interaction struct {
@@ -1248,10 +1248,10 @@ type InteractionResponseType int
 
 const (
 	InteractionResponseTypePong                             InteractionResponseType = 1
-	InteractionResponseTypeChannelMessageWithSource                                 = 4
-	InteractionResponseTypeDeferredChannelMessageWithSource                         = 5
-	InteractionResponseTypeDeferredUpdateMessage                                    = 6
-	InteractionResponseTypeUpdateMessage                                            = 7
+	InteractionResponseTypeChannelMessageWithSource         InteractionResponseType = 4
+	InteractionResponseTypeDeferredChannelMessageWithSource InteractionResponseType = 5
+	InteractionResponseTypeDeferredUpdateMessage            InteractionResponseType = 6
+	InteractionResponseTypeUpdateMessage                    InteractionResponseType = 7
 )
 
 type InteractionApplicationCommandCallbackData struct {
