@@ -173,7 +173,7 @@ type MessageEdit struct {
 	Content    *string       `json:"content,omitempty"`
 	Embed      *MessageEmbed `json:"embed,omitempty"`
 	Flags      int           `json:"flags,omitempty"`
-	Components []Component   `json:"components,omitempty"`
+	Components *[]Component  `json:"components,omitempty"`
 
 	ID      string `json:"-"`
 	Channel string `json:"-"`
