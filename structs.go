@@ -12,6 +12,7 @@
 package discordgo
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -364,14 +365,43 @@ const (
 
 // Emoji struct holds data related to Emoji's
 type Emoji struct {
-	ID            string    `json:"id"`
-	Name          string    `json:"name"`
-	Roles         *[]string `json:"roles"`
-	User          *User     `json:"user"`
-	RequireColons bool      `json:"require_colons"`
-	Managed       bool      `json:"managed"`
-	Animated      bool      `json:"animated"`
-	Available     bool      `json:"available"`
+	ID            NullString `json:"id"`
+	Name          string     `json:"name"`
+	Roles         *[]string  `json:"roles"`
+	User          *User      `json:"user"`
+	RequireColons bool       `json:"require_colons"`
+	Managed       bool       `json:"managed"`
+	Animated      bool       `json:"animated"`
+	Available     bool       `json:"available"`
+}
+
+type NullString string
+
+func (n NullString) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	if len(n) == 0 {
+		buf.WriteString("null")
+	} else {
+		buf.WriteString(`"` + string(n) + `"`)
+	}
+
+	return buf.Bytes(), nil
+}
+
+func (n *NullString) UnmarshalJSON(in []byte) error {
+	str := string(in)
+	if str == "null" {
+		str = ""
+		return nil
+	}
+
+	ns := NullString(str)
+	if len(ns) >= 2 {
+		ns = ns[1 : len(ns)-1]
+	}
+
+	*n = ns
+	return nil
 }
 
 // MessageFormat returns a correctly formatted Emoji for use in Message content and embeds
@@ -390,12 +420,12 @@ func (e *Emoji) MessageFormat() string {
 // APIName returns an correctly formatted API name for use in the MessageReactions endpoints.
 func (e *Emoji) APIName() string {
 	if e.ID != "" && e.Name != "" {
-		return e.Name + ":" + e.ID
+		return e.Name + ":" + string(e.ID)
 	}
 	if e.Name != "" {
 		return e.Name
 	}
-	return e.ID
+	return string(e.ID)
 }
 
 // VerificationLevel type definition

@@ -567,7 +567,7 @@ func (s *State) Emoji(guildID, emojiID string) (*Emoji, error) {
 	defer s.RUnlock()
 
 	for _, e := range guild.Emojis {
-		if e.ID == emojiID {
+		if string(e.ID) == emojiID {
 			return e, nil
 		}
 	}
