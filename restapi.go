@@ -71,6 +71,7 @@ func incrementRequestOnEndpoint(url string) {
 		url = strings.Replace(url, m, "//", 1)
 	}
 	url = strings.ReplaceAll(url, "//", "/:var:/")
+	url = strings.Replace(url, "/:var:/", "//", 1)
 	_, ok := RequestsPerEndpoint[url]
 	if !ok {
 		RequestsPerEndpoint[url] = 0
