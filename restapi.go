@@ -25,6 +25,7 @@ import (
 	"net/http"
 	"net/textproto"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -43,8 +44,11 @@ var (
 )
 
 var (
-	TotalRequestsSent      = make(map[string]int)
-	TotalRequestsSentMutex = sync.Mutex{}
+	TotalRequestsSent        = make(map[string]int)
+	TotalRequestsSentMutex   = sync.Mutex{}
+	RequestsPerEndpoint      = make(map[string]int)
+	RequestsPerEndpointMutex = sync.Mutex{}
+	idRegex, _               = regexp.Compile(`/\d+(/|$)`)
 )
 
 func incrementRequestsSent(token string) {
@@ -58,6 +62,20 @@ func incrementRequestsSent(token string) {
 	}
 
 	TotalRequestsSent[token] = total + 1
+}
+
+func incrementRequestOnEndpoint(url string) {
+	RequestsPerEndpointMutex.Lock()
+	defer RequestsPerEndpointMutex.Unlock()
+	for _, m := range idRegex.FindAllString(url, -1) {
+		url = strings.Replace(url, m, "//", 1)
+	}
+	url = strings.ReplaceAll(url, "//", "/:var:/")
+	_, ok := RequestsPerEndpoint[url]
+	if !ok {
+		RequestsPerEndpoint[url] = 0
+	}
+	RequestsPerEndpoint[url] += 1
 }
 
 // Request is the same as RequestWithBucketID but the bucket id is the same as the urlStr
@@ -83,6 +101,7 @@ func (s *Session) RequestWithBucketID(method, urlStr string, data interface{}, b
 // retry with sequence+1 until it either succeeds or sequence >= session.MaxRestRetries
 func (s *Session) request(method, urlStr, contentType string, b []byte, bucketID string, sequence int) (response []byte, err error) {
 	go incrementRequestsSent(s.Token)
+	go incrementRequestOnEndpoint(bucketID)
 	if GlobalLimit {
 		if GlobalRateLimit == 0 {
 			log.Println("Global Rate Limit depleted! (" + s.Token + ")") // Note: Temp
