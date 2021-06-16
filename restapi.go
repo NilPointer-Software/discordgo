@@ -1632,8 +1632,10 @@ var quoteEscaper = strings.NewReplacer("\\", "\\\\", `"`, "\\\"")
 // channelID : The ID of a Channel.
 // data      : The message struct to send.
 func (s *Session) ChannelMessageSendComplex(channelID string, data *MessageSend) (st *Message, err error) {
-	if data.Embed != nil && data.Embed.Type == "" {
-		data.Embed.Type = "rich"
+	for _, embed := range data.Embeds {
+		if embed != nil && embed.Type == "" {
+			embed.Type = "rich"
+		}
 	}
 
 	endpoint := EndpointChannelMessages(channelID)
@@ -1726,7 +1728,16 @@ func (s *Session) ChannelMessageSendTTS(channelID string, content string) (*Mess
 // embed     : The embed data to send.
 func (s *Session) ChannelMessageSendEmbed(channelID string, embed *MessageEmbed) (*Message, error) {
 	return s.ChannelMessageSendComplex(channelID, &MessageSend{
-		Embed: embed,
+		Embeds: []*MessageEmbed{embed},
+	})
+}
+
+// ChannelMessageSendEmbeds sends a message to the given channel with embedded data.
+// channelID : The ID of a Channel.
+// embeds    : The embed data to send.
+func (s *Session) ChannelMessageSendEmbeds(channelID string, embeds []*MessageEmbed) (*Message, error) {
+	return s.ChannelMessageSendComplex(channelID, &MessageSend{
+		Embeds: embeds,
 	})
 }
 
@@ -1755,8 +1766,10 @@ func (s *Session) ChannelMessageEdit(channelID, messageID, content string) (*Mes
 // ChannelMessageEditComplex edits an existing message, replacing it entirely with
 // the given MessageEdit struct
 func (s *Session) ChannelMessageEditComplex(m *MessageEdit) (st *Message, err error) {
-	if m.Embed != nil && m.Embed.Type == "" {
-		m.Embed.Type = "rich"
+	for _, embed := range m.Embeds {
+		if embed != nil && embed.Type == "" {
+			embed.Type = "rich"
+		}
 	}
 
 	response, err := s.RequestWithBucketID("PATCH", EndpointChannelMessage(m.Channel, m.ID), m, EndpointChannelMessage(m.Channel, ""))
@@ -1768,12 +1781,12 @@ func (s *Session) ChannelMessageEditComplex(m *MessageEdit) (st *Message, err er
 	return
 }
 
-// ChannelMessageEditEmbed edits an existing message with embedded data.
+// ChannelMessageEditEmbeds edits an existing message with embedded data.
 // channelID : The ID of a Channel
 // messageID : The ID of a Message
-// embed     : The embed data to send
-func (s *Session) ChannelMessageEditEmbed(channelID, messageID string, embed *MessageEmbed) (*Message, error) {
-	return s.ChannelMessageEditComplex(NewMessageEdit(channelID, messageID).SetEmbed(embed))
+// embeds    : The embed data to send
+func (s *Session) ChannelMessageEditEmbeds(channelID, messageID string, embeds []*MessageEmbed) (*Message, error) {
+	return s.ChannelMessageEditComplex(NewMessageEdit(channelID, messageID).SetEmbeds(embeds))
 }
 
 // ChannelMessageDelete deletes a message from the Channel.
