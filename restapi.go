@@ -46,9 +46,9 @@ var (
 var (
 	TotalRequestsSent        = make(map[string]int)
 	TotalRequestsSentMutex   = sync.Mutex{}
-	RequestsPerEndpoint      = make(map[string]int)
+	RequestsPerEndpoint      = make(map[string]map[string]int)
 	RequestsPerEndpointMutex = sync.Mutex{}
-	idRegex, _               = regexp.Compile(`/\d+(/|$)`)
+	newIdRegex, _            = regexp.Compile(`(/[a-z2-]+|/@me)+(/|)`)
 )
 
 func incrementRequestsSent(token string) {
@@ -64,19 +64,25 @@ func incrementRequestsSent(token string) {
 	TotalRequestsSent[token] = total + 1
 }
 
-func incrementRequestOnEndpoint(url string) {
+func incrementRequestOnEndpoint(url string, method string) {
 	RequestsPerEndpointMutex.Lock()
 	defer RequestsPerEndpointMutex.Unlock()
-	for _, m := range idRegex.FindAllString(url, -1) {
-		url = strings.Replace(url, m, "//", 1)
+	url = url[len(EndpointAPI)-1:]
+	url = strings.Join(newIdRegex.FindAllString(url, -1), ":var:")
+	if url[len(url)-1] == '/' {
+		url += ":var:"
 	}
-	url = strings.ReplaceAll(url, "//", "/:var:/")
-	url = strings.Replace(url, "/:var:/", "//", 1)
 	_, ok := RequestsPerEndpoint[url]
 	if !ok {
-		RequestsPerEndpoint[url] = 0
+		RequestsPerEndpoint[url] = make(map[string]int)
+		RequestsPerEndpoint[url][method] = 0
+	} else {
+		_, o := RequestsPerEndpoint[url][method]
+		if !o {
+			RequestsPerEndpoint[url][method] = 0
+		}
 	}
-	RequestsPerEndpoint[url] += 1
+	RequestsPerEndpoint[url][method] += 1
 }
 
 // Request is the same as RequestWithBucketID but the bucket id is the same as the urlStr
@@ -102,7 +108,7 @@ func (s *Session) RequestWithBucketID(method, urlStr string, data interface{}, b
 // retry with sequence+1 until it either succeeds or sequence >= session.MaxRestRetries
 func (s *Session) request(method, urlStr, contentType string, b []byte, bucketID string, sequence int) (response []byte, err error) {
 	go incrementRequestsSent(s.Token)
-	go incrementRequestOnEndpoint(bucketID)
+	go incrementRequestOnEndpoint(bucketID, strings.ToUpper(method))
 	if GlobalLimit {
 		if GlobalRateLimit == 0 {
 			log.Println("Global Rate Limit depleted! (" + s.Token + ")") // Note: Temp

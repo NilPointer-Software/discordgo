@@ -1,6 +1,8 @@
 package discordgo
 
 import (
+	"encoding/json"
+	"log"
 	"testing"
 )
 
@@ -295,3 +297,11 @@ func TestGuildPrune(t *testing.T) {
 	}
 }
 */
+
+func TestEndpointCounting(t *testing.T) {
+	b, err := json.MarshalIndent(RequestsPerEndpoint, "", "  ")
+	if err != nil {
+		t.Errorf("Error while serialization to josn: %s", err)
+	}
+	log.Println(string(b))
+}
