@@ -49,6 +49,7 @@ var (
 	RequestsPerEndpoint      = make(map[string]map[string]int)
 	RequestsPerEndpointMutex = sync.Mutex{}
 	newIdRegex, _            = regexp.Compile(`(/[a-z2-]+|/@me)+(/|)`)
+	keywords              = []string{"applications", "audit-logs", "bans", "bot", "bulk-delete", "channels", "commands", "connections", "emojis", "gateway", "guilds", "integrations", "invites", "@me", "members", "messages", "nick", "oauth2", "permissions", "pins", "preview", "prune", "reactions", "regions", "roles", "search", "templates", "typing", "users", "voice", "webhooks", "widget", "widget.json"}
 )
 
 func incrementRequestsSent(token string) {
@@ -68,10 +69,23 @@ func incrementRequestOnEndpoint(url string, method string) {
 	RequestsPerEndpointMutex.Lock()
 	defer RequestsPerEndpointMutex.Unlock()
 	url = url[len(EndpointAPI)-1:]
-	url = strings.Join(newIdRegex.FindAllString(url, -1), ":var:")
-	if url[len(url)-1] == '/' {
-		url += ":var:"
+	parts := strings.Split(url, "/")
+	for i, part := range parts {
+		if i == 0 && part == "" {
+			continue
+		}
+		f := false
+		for _, keyword := range keywords {
+			if part == keyword {
+				f = true
+				break
+			}
+		}
+		if !f {
+			parts[i] = ":var:"
+		}
 	}
+	url = strings.Join(parts, "/")
 	_, ok := RequestsPerEndpoint[url]
 	if !ok {
 		RequestsPerEndpoint[url] = make(map[string]int)
