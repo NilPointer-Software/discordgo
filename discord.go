@@ -21,7 +21,7 @@ import (
 )
 
 // VERSION of DiscordGo, follows Semantic Versioning. (http://semver.org/)
-const VERSION = "0.3.9-nlp"
+const VERSION = "0.3.11-nlp"
 
 // ErrMFA will be risen by New when the user has 2FA.
 var ErrMFA = errors.New("account has 2FA enabled")

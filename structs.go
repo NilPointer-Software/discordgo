@@ -1140,14 +1140,18 @@ const (
 )
 
 type Component struct {
-	Type       ComponentType `json:"type"`
-	Style      Style         `json:"style,omitempty"`
-	Label      string        `json:"label,omitempty"`
-	Emoji      *Emoji        `json:"emoji,omitempty"`
-	CustomID   string        `json:"custom_id,omitempty"`
-	URL        string        `json:"url,omitempty"`
-	Disabled   bool          `json:"disabled,omitempty"`
-	Components *[]Component  `json:"components,omitempty"`
+	Type        ComponentType   `json:"type"`
+	Style       Style           `json:"style,omitempty"`
+	Label       string          `json:"label,omitempty"`
+	Emoji       *Emoji          `json:"emoji,omitempty"`
+	CustomID    string          `json:"custom_id,omitempty"`
+	URL         string          `json:"url,omitempty"`
+	Disabled    bool            `json:"disabled,omitempty"`
+	Components  *[]Component    `json:"components,omitempty"`
+	Options     *[]SelectOption `json:"options,omitempty"`
+	Placeholder string          `json:"placeholder,omitempty"`
+	MinValue    *int            `json:"min_values,omitempty"` // Can be 0
+	MaxValue    int             `json:"max_values,omitempty"`
 }
 
 type ComponentType int
@@ -1155,6 +1159,7 @@ type ComponentType int
 const (
 	ComponentTypeActionRow ComponentType = iota + 1
 	ComponentTypeButton
+	ComponentTypeSelectMenu
 )
 
 type Style int
@@ -1166,6 +1171,14 @@ const (
 	StyleDanger
 	StyleLink
 )
+
+type SelectOption struct {
+	Label       string `json:"label"`
+	Value       string `json:"value"`
+	Description string `json:"description,omitempty"`
+	Emoji       *Emoji `json:"emoji,omitempty"`
+	Default     bool   `json:"default,omitempty"`
+}
 
 type ApplicationCommand struct {
 	ID                string                      `json:"id,omitempty"`
@@ -1253,6 +1266,7 @@ type ApplicationCommandInteractionData struct {
 	Options       *[]ApplicationCommandInteractionDataOption `json:"options"`
 	CustomID      string                                     `json:"custom_id"`
 	ComponentType ComponentType                              `json:"component_type"`
+	Values        []string                                   `json:"values"`
 }
 
 type ApplicationCommandInteractionDataResolved struct {
